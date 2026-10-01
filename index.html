@@ -5,20 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Recomp Pro" />
-  <meta name="theme-color" content="#06080D" />
-  <title>Recomp Pro Tracker</title>
+  <meta name="apple-mobile-web-app-title" content="Recomp OS" />
+  <meta name="theme-color" content="#07090E" />
+  <title>Recomp OS — Fitness & Intake Engine</title>
 
+  <!-- Google Identity Client Library -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg: #06080D;
-      --surface: #0E121B;
-      --surface-card: #141A26;
-      --surface-elevated: #1B2333;
+      --bg: #07090E;
+      --surface: #0E121C;
+      --surface-card: #151A27;
+      --surface-elevated: #1D2436;
       --border: rgba(255, 255, 255, 0.08);
       --border-accent: rgba(16, 185, 129, 0.35);
 
@@ -51,8 +55,8 @@
       font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
       min-height: 100vh;
       overflow-x: hidden;
-      padding-top: calc(var(--safe-top) + 14px);
-      padding-bottom: calc(var(--safe-bottom) + 85px);
+      padding-top: calc(var(--safe-top) + 12px);
+      padding-bottom: calc(var(--safe-bottom) + 90px);
     }
 
     /* Splash Screen */
@@ -75,8 +79,8 @@
     }
 
     .splash-emblem {
-      width: 84px;
-      height: 84px;
+      width: 82px;
+      height: 82px;
       border-radius: 24px;
       background: linear-gradient(135deg, var(--accent), var(--accent-cyan));
       display: flex;
@@ -86,16 +90,16 @@
       animation: pulse 1.8s infinite ease-in-out;
     }
 
-    .splash-emblem svg { width: 44px; height: 44px; fill: #06080D; }
-    .splash-name { font-size: 24px; font-weight: 800; margin-top: 18px; letter-spacing: -0.5px; }
-    .splash-sub { font-size: 13px; color: var(--text-sub); margin-top: 4px; font-weight: 500; }
+    .splash-emblem svg { width: 42px; height: 42px; fill: #07090E; }
+    .splash-title { font-size: 22px; font-weight: 800; margin-top: 18px; letter-spacing: -0.5px; }
+    .splash-sub { font-size: 13px; color: var(--text-sub); margin-top: 4px; }
 
     @keyframes pulse {
       0% { transform: scale(0.96); box-shadow: 0 0 25px rgba(16,185,129,0.25); }
       100% { transform: scale(1.03); box-shadow: 0 0 60px rgba(16,185,129,0.55); }
     }
 
-    /* Shell Layout */
+    /* Layout Shell */
     .app-shell { max-width: 480px; margin: 0 auto; padding: 0 16px; }
 
     header {
@@ -105,23 +109,25 @@
       margin-bottom: 20px;
     }
 
-    .brand-wrap { display: flex; align-items: center; gap: 12px; }
-    .brand-avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, var(--accent), var(--accent-cyan));
+    .user-profile { display: flex; align-items: center; gap: 12px; }
+    .user-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: var(--surface-card);
+      border: 1px solid var(--border);
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 4px 14px rgba(16,185,129,0.25);
+      overflow: hidden;
     }
-    .brand-avatar svg { width: 22px; height: 22px; fill: #06080D; }
+    .user-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .user-avatar svg { width: 22px; height: 22px; fill: var(--text-muted); }
 
-    .brand-text h1 { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
-    .brand-text p { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+    .user-meta h1 { font-size: 18px; font-weight: 800; letter-spacing: -0.4px; }
+    .user-meta p { font-size: 12px; color: var(--text-muted); }
 
-    .day-badge {
+    .badge-pill {
       font-size: 11px;
       font-weight: 700;
       letter-spacing: 0.5px;
@@ -133,15 +139,15 @@
       text-transform: uppercase;
     }
 
-    /* Rings Grid */
-    .ring-grid {
+    /* Circular KPI Rings */
+    .kpi-row {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 10px;
       margin-bottom: 20px;
     }
 
-    .metric-card {
+    .kpi-card {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 18px;
@@ -152,60 +158,54 @@
       text-align: center;
     }
 
-    .ring-box {
-      width: 60px;
-      height: 60px;
-      position: relative;
-      margin-bottom: 8px;
-    }
-
-    .ring-box svg { transform: rotate(-90deg); width: 60px; height: 60px; }
-    .ring-bg { fill: none; stroke: rgba(255,255,255,0.06); stroke-width: 5; }
-    .ring-bar {
+    .ring-wrap { width: 62px; height: 62px; position: relative; margin-bottom: 8px; }
+    .ring-wrap svg { transform: rotate(-90deg); width: 62px; height: 62px; }
+    .ring-bg { fill: none; stroke: rgba(255,255,255,0.06); stroke-width: 5.5; }
+    .ring-fill {
       fill: none;
-      stroke-width: 5;
+      stroke-width: 5.5;
       stroke-linecap: round;
       stroke-dasharray: 157;
       stroke-dashoffset: 157;
       transition: stroke-dashoffset 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .ring-bar.cal { stroke: var(--accent-orange); }
-    .ring-bar.pro { stroke: var(--accent); }
-    .ring-bar.wat { stroke: var(--accent-cyan); }
+    .ring-fill.cal { stroke: var(--accent-orange); }
+    .ring-fill.pro { stroke: var(--accent); }
+    .ring-fill.wat { stroke: var(--accent-cyan); }
 
-    .ring-val {
+    .ring-text {
       position: absolute;
       inset: 0;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 11.5px;
-      font-weight: 700;
+      font-weight: 800;
       font-family: 'JetBrains Mono', monospace;
     }
 
-    .metric-lbl { font-size: 11px; font-weight: 600; color: var(--text-muted); }
-    .metric-sub { font-size: 9.5px; color: var(--text-sub); margin-top: 2px; }
+    .kpi-title { font-size: 11px; font-weight: 700; color: var(--text-muted); }
+    .kpi-target { font-size: 9.5px; color: var(--text-sub); margin-top: 2px; }
 
-    /* Panels & Inputs */
+    /* Cards & Form Panels */
     .panel {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 20px;
       padding: 18px;
       margin-bottom: 16px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.25);
     }
 
-    .panel-head {
+    .panel-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 14px;
     }
 
-    .panel-head h2 { font-size: 15px; font-weight: 700; letter-spacing: -0.2px; }
+    .panel-header h2 { font-size: 15px; font-weight: 800; letter-spacing: -0.2px; }
 
     .field-group { margin-bottom: 14px; }
     .field-label {
@@ -218,7 +218,7 @@
       margin-bottom: 6px;
     }
 
-    .data-input {
+    .form-input {
       width: 100%;
       background: var(--surface-card);
       border: 1px solid var(--border);
@@ -232,7 +232,7 @@
       transition: border-color 0.2s, background 0.2s;
     }
 
-    .data-input:focus {
+    .form-input:focus {
       border-color: var(--accent);
       background: var(--surface-elevated);
     }
@@ -244,7 +244,7 @@
       margin-top: 8px;
     }
 
-    .chip-btn {
+    .chip-button {
       background: var(--surface-card);
       border: 1px solid var(--border);
       border-radius: 8px;
@@ -256,14 +256,14 @@
       transition: all 0.15s;
     }
 
-    .chip-btn:active {
+    .chip-button:active {
       transform: scale(0.96);
       background: var(--accent);
       color: #06080D;
       border-color: var(--accent);
     }
 
-    .btn-submit {
+    .primary-btn {
       width: 100%;
       background: linear-gradient(135deg, #10B981, #059669);
       color: #04140D;
@@ -281,9 +281,9 @@
       transition: transform 0.15s, opacity 0.15s;
     }
 
-    .btn-submit:active { transform: scale(0.98); opacity: 0.9; }
+    .primary-btn:active { transform: scale(0.98); opacity: 0.9; }
 
-    /* Split Filter Bar */
+    /* Workouts Carousel & Exercise Cards */
     .split-carousel {
       display: flex;
       gap: 8px;
@@ -313,8 +313,7 @@
       border-color: var(--accent);
     }
 
-    /* Exercise Rows */
-    .exercise-row {
+    .exercise-card {
       background: var(--surface-card);
       border: 1px solid var(--border);
       border-radius: 14px;
@@ -323,19 +322,19 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      transition: all 0.15s;
       cursor: pointer;
+      transition: all 0.15s;
     }
 
-    .exercise-row:active {
+    .exercise-card:active {
       background: var(--surface-elevated);
       transform: scale(0.99);
     }
 
-    .ex-detail h3 { font-size: 14px; font-weight: 700; margin-bottom: 3px; }
-    .ex-detail p { font-size: 12px; color: var(--text-muted); }
+    .ex-info h3 { font-size: 14px; font-weight: 700; margin-bottom: 3px; }
+    .ex-info p { font-size: 12px; color: var(--text-muted); }
 
-    .rest-pill {
+    .timer-pill {
       font-size: 11px;
       font-weight: 700;
       color: var(--accent);
@@ -364,7 +363,7 @@
 
     #timer-modal.visible { opacity: 1; visibility: visible; }
 
-    .timer-dialog {
+    .timer-sheet {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 24px;
@@ -376,9 +375,9 @@
       transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    #timer-modal.visible .timer-dialog { transform: scale(1); }
+    #timer-modal.visible .timer-sheet { transform: scale(1); }
 
-    .timer-readout {
+    .timer-digits {
       font-size: 48px;
       font-family: 'JetBrains Mono', monospace;
       font-weight: 800;
@@ -386,9 +385,9 @@
       margin: 14px 0 18px;
     }
 
-    .timer-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .modal-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 
-    .btn-secondary {
+    .secondary-btn {
       background: var(--surface-card);
       border: 1px solid var(--border);
       color: var(--text);
@@ -430,7 +429,7 @@
 
     #sheet-modal.visible .sheet-drawer { transform: translateY(0); }
 
-    .set-grid {
+    .set-row {
       display: grid;
       grid-template-columns: 36px 1fr 1fr 40px;
       gap: 8px;
@@ -438,14 +437,14 @@
       margin-bottom: 8px;
     }
 
-    .set-idx {
+    .set-id {
       font-size: 11px;
       font-weight: 800;
       color: var(--text-muted);
       text-align: center;
     }
 
-    .set-btn {
+    .set-check {
       width: 38px;
       height: 38px;
       border-radius: 10px;
@@ -459,13 +458,13 @@
       transition: all 0.15s;
     }
 
-    .set-btn.done {
+    .set-check.done {
       background: var(--accent);
       border-color: var(--accent);
       color: #06080D;
     }
 
-    /* Bottom Dock */
+    /* Bottom Dock Bar */
     .dock {
       position: fixed;
       bottom: 0;
@@ -475,7 +474,7 @@
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border-top: 1px solid var(--border);
-      padding: 10px 24px calc(var(--safe-bottom) + 6px);
+      padding: 10px 18px calc(var(--safe-bottom) + 6px);
       display: flex;
       justify-content: space-around;
       z-index: 900;
@@ -494,10 +493,10 @@
     }
 
     .dock-tab svg { width: 22px; height: 22px; fill: currentColor; }
-    .dock-tab span { font-size: 10.5px; font-weight: 600; }
+    .dock-tab span { font-size: 10px; font-weight: 600; }
     .dock-tab.active { color: var(--accent); transform: translateY(-1px); }
 
-    /* Native Toast */
+    /* Toast Notification */
     #toast {
       position: fixed;
       top: calc(var(--safe-top) + 10px);
@@ -540,144 +539,202 @@
         <path d="M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14l1.43 1.43L2 7.71l1.43 1.43L2 10.57 3.43 12 7 8.43 15.57 17 12 20.57 13.43 22l1.43-1.43 1.43 1.43 2.14-2.14 1.43 1.43 1.43-1.43-1.43-1.43L22 16.29z"/>
       </svg>
     </div>
-    <div class="splash-name">RECOMP PRO</div>
-    <div class="splash-sub">Hypertrophy & Intake Engine</div>
+    <div class="splash-title">RECOMP OS</div>
+    <div class="splash-sub">Hypertrophy & Macro Core</div>
   </div>
 
-  <div id="toast">Entry Saved</div>
+  <div id="toast">Saved</div>
 
-  <!-- Main Container -->
+  <!-- Main View Container -->
   <div class="app-shell">
     <header>
-      <div class="brand-wrap">
-        <div class="brand-avatar">
-          <svg viewBox="0 0 24 24">
-            <path d="M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14l1.43 1.43L2 7.71l1.43 1.43L2 10.57 3.43 12 7 8.43 15.57 17 12 20.57 13.43 22l1.43-1.43 1.43 1.43 2.14-2.14 1.43 1.43 1.43-1.43-1.43-1.43L22 16.29z"/>
-          </svg>
+      <div class="user-profile">
+        <div class="user-avatar" id="avatar-container">
+          <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
         </div>
-        <div class="brand-text">
-          <h1>Dashboard</h1>
+        <div class="user-meta">
+          <h1 id="user-display-name">Mahesh</h1>
           <p id="label-date">Today</p>
         </div>
       </div>
-      <div class="day-badge" id="label-split-badge">PUSH A</div>
+      <div class="badge-pill" id="badge-split">PUSH A</div>
     </header>
 
-    <!-- Visual Ring Dashboard -->
-    <div class="ring-grid">
-      <div class="metric-card">
-        <div class="ring-box">
+    <!-- Visual Dashboard Rings -->
+    <div class="kpi-row">
+      <div class="kpi-card">
+        <div class="ring-wrap">
           <svg viewBox="0 0 60 60">
             <circle class="ring-bg" cx="30" cy="30" r="25"/>
-            <circle id="ring-cal" class="ring-bar cal" cx="30" cy="30" r="25"/>
+            <circle id="ring-cal" class="ring-fill cal" cx="30" cy="30" r="25"/>
           </svg>
-          <div class="ring-val" id="text-cal">0</div>
+          <div class="ring-text" id="disp-cal">0</div>
         </div>
-        <div class="metric-lbl">Calories</div>
-        <div class="metric-sub">Target: 2200</div>
+        <div class="kpi-title">Calories</div>
+        <div class="kpi-target" id="lbl-target-cal">Goal: 2200</div>
       </div>
 
-      <div class="metric-card">
-        <div class="ring-box">
+      <div class="kpi-card">
+        <div class="ring-wrap">
           <svg viewBox="0 0 60 60">
             <circle class="ring-bg" cx="30" cy="30" r="25"/>
-            <circle id="ring-pro" class="ring-bar pro" cx="30" cy="30" r="25"/>
+            <circle id="ring-pro" class="ring-fill pro" cx="30" cy="30" r="25"/>
           </svg>
-          <div class="ring-val" id="text-pro">0g</div>
+          <div class="ring-text" id="disp-pro">0g</div>
         </div>
-        <div class="metric-lbl">Protein</div>
-        <div class="metric-sub">Target: 160g</div>
+        <div class="kpi-title">Protein</div>
+        <div class="kpi-target" id="lbl-target-pro">Goal: 160g</div>
       </div>
 
-      <div class="metric-card">
-        <div class="ring-box">
+      <div class="kpi-card">
+        <div class="ring-wrap">
           <svg viewBox="0 0 60 60">
             <circle class="ring-bg" cx="30" cy="30" r="25"/>
-            <circle id="ring-wat" class="ring-bar wat" cx="30" cy="30" r="25"/>
+            <circle id="ring-wat" class="ring-fill wat" cx="30" cy="30" r="25"/>
           </svg>
-          <div class="ring-val" id="text-wat">0.0L</div>
+          <div class="ring-text" id="disp-wat">0.0L</div>
         </div>
-        <div class="metric-lbl">Water</div>
-        <div class="metric-sub">Target: 3.5L</div>
+        <div class="kpi-title">Water</div>
+        <div class="kpi-target" id="lbl-target-wat">Goal: 3.5L</div>
       </div>
     </div>
 
-    <!-- View: Dashboard / Log -->
-    <div id="view-dashboard" class="view-content active">
+    <!-- PAGE 1: DASHBOARD -->
+    <div id="page-dashboard" class="view-content active">
       <div class="panel">
-        <div class="panel-head">
-          <h2>Nutrition & Water Intake</h2>
+        <div class="panel-header">
+          <h2>Quick Daily Log</h2>
         </div>
 
         <div class="field-group">
-          <label class="field-label">Water Intake (Liters)</label>
-          <input type="number" id="input-water" class="data-input" placeholder="0.00" step="0.25">
+          <label class="field-label">Water (Liters)</label>
+          <input type="number" id="input-water" class="form-input" placeholder="0.00" step="0.25">
           <div class="preset-chips">
-            <button class="chip-btn" onclick="addWater(0.25)">+250ml</button>
-            <button class="chip-btn" onclick="addWater(0.50)">+500ml</button>
-            <button class="chip-btn" onclick="addWater(0.75)">+750ml</button>
-            <button class="chip-btn" onclick="addWater(1.00)">+1.0L</button>
+            <button class="chip-button" onclick="addWater(0.25)">+250ml</button>
+            <button class="chip-button" onclick="addWater(0.50)">+500ml</button>
+            <button class="chip-button" onclick="addWater(0.75)">+750ml</button>
+            <button class="chip-button" onclick="addWater(1.00)">+1.0L</button>
           </div>
         </div>
 
         <div class="field-group">
-          <label class="field-label">Calories (kcal)</label>
-          <input type="number" id="input-cal" class="data-input" placeholder="e.g. 550">
+          <label class="field-label">Calories Consumed (kcal)</label>
+          <input type="number" id="input-cal" class="form-input" placeholder="e.g. 550">
         </div>
 
         <div class="field-group">
-          <label class="field-label">Protein (grams)</label>
-          <input type="number" id="input-pro" class="data-input" placeholder="e.g. 35">
+          <label class="field-label">Protein Consumed (g)</label>
+          <input type="number" id="input-pro" class="form-input" placeholder="e.g. 35">
           <div class="preset-chips">
-            <button class="chip-btn" onclick="addProtein(25)">+25g</button>
-            <button class="chip-btn" onclick="addProtein(35)">+35g</button>
-            <button class="chip-btn" onclick="addProtein(50)">+50g</button>
-            <button class="chip-btn" onclick="resetDay()">Reset</button>
+            <button class="chip-button" onclick="addProtein(25)">+25g</button>
+            <button class="chip-button" onclick="addProtein(35)">+35g</button>
+            <button class="chip-button" onclick="addProtein(50)">+50g</button>
+            <button class="chip-button" onclick="resetMacros()">Reset</button>
           </div>
         </div>
 
-        <button class="btn-submit" onclick="logDailyIntake()">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-          </svg>
+        <button class="primary-btn" onclick="submitIntake()">
           Confirm & Save Intake
         </button>
       </div>
     </div>
 
-    <!-- View: Workouts -->
-    <div id="view-workouts" class="view-content">
+    <!-- PAGE 2: WORKOUTS -->
+    <div id="page-workouts" class="view-content">
       <div class="split-carousel">
-        <button class="split-chip active" onclick="selectSplit('pushA', this)">Push A</button>
-        <button class="split-chip" onclick="selectSplit('pullA', this)">Pull A</button>
-        <button class="split-chip" onclick="selectSplit('legsA', this)">Legs A</button>
-        <button class="split-chip" onclick="selectSplit('pushB', this)">Push B</button>
-        <button class="split-chip" onclick="selectSplit('pullB', this)">Pull B</button>
-        <button class="split-chip" onclick="selectSplit('legsB', this)">Legs B</button>
+        <button class="split-chip active" onclick="loadSplitView('pushA', this)">Push A</button>
+        <button class="split-chip" onclick="loadSplitView('pullA', this)">Pull A</button>
+        <button class="split-chip" onclick="loadSplitView('legsA', this)">Legs A</button>
+        <button class="split-chip" onclick="loadSplitView('pushB', this)">Push B</button>
+        <button class="split-chip" onclick="loadSplitView('pullB', this)">Pull B</button>
+        <button class="split-chip" onclick="loadSplitView('legsB', this)">Legs B</button>
       </div>
 
       <div class="panel">
-        <div class="panel-head">
-          <h2 id="heading-split">Push A — Chest & Triceps Focus</h2>
+        <div class="panel-header">
+          <h2 id="split-heading">Push A Routine</h2>
         </div>
         <div id="exercise-feed"></div>
+
+        <button class="secondary-btn" style="width:100%;margin-top:12px;" onclick="promptAddExercise()">
+          + Add Custom Exercise
+        </button>
+      </div>
+    </div>
+
+    <!-- PAGE 3: DIET TARGETS -->
+    <div id="page-diet" class="view-content">
+      <div class="panel">
+        <div class="panel-header">
+          <h2>Diet Plan & Target Macros</h2>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Target Calories (kcal/day)</label>
+          <input type="number" id="target-cal-input" class="form-input">
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Target Protein (g/day)</label>
+          <input type="number" id="target-pro-input" class="form-input">
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Target Water (Liters/day)</label>
+          <input type="number" id="target-wat-input" step="0.25" class="form-input">
+        </div>
+
+        <button class="primary-btn" onclick="saveDietSettings()">
+          Update Macro Targets
+        </button>
+      </div>
+    </div>
+
+    <!-- PAGE 4: SETTINGS & GOOGLE AUTH -->
+    <div id="page-settings" class="view-content">
+      <div class="panel">
+        <div class="panel-header">
+          <h2>Account & Google Sign-In</h2>
+        </div>
+
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px;">
+          Link your Google Account to identify your session and sync identity.
+        </p>
+
+        <!-- Official Google Sign-In Container -->
+        <div id="g_id_onload"
+             data-client_id="YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com"
+             data-context="signin"
+             data-ux_mode="popup"
+             data-callback="handleGoogleCredential"
+             data-auto_prompt="false">
+        </div>
+        <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="filled_black" data-text="signin_with" data-size="large" data-logo_alignment="left" style="margin-bottom:14px;"></div>
+
+        <div id="google-profile-info" style="display:none;background:var(--surface-card);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:14px;">
+          <p id="user-email" style="font-size:13px;font-weight:700;color:var(--accent);"></p>
+        </div>
+
+        <button class="secondary-btn" style="width:100%;color:var(--danger);border-color:rgba(239,68,68,0.3);" onclick="clearAllData()">
+          Reset All Cache & Data
+        </button>
       </div>
     </div>
   </div>
 
   <!-- Rest Timer Modal -->
   <div id="timer-modal">
-    <div class="timer-dialog">
-      <div style="font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase;">Rest Interval</div>
-      <div class="timer-readout" id="timer-display">01:30</div>
-      <div class="timer-buttons">
-        <button class="btn-secondary" onclick="toggleTimer()" id="btn-timer-toggle">Pause</button>
-        <button class="btn-secondary" onclick="dismissTimer()">Dismiss</button>
+    <div class="timer-sheet">
+      <div style="font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase;">Resting</div>
+      <div class="timer-digits" id="timer-digits">01:30</div>
+      <div class="modal-grid-2">
+        <button class="secondary-btn" onclick="toggleTimer()" id="btn-timer-toggle">Pause</button>
+        <button class="secondary-btn" onclick="dismissTimer()">Close</button>
       </div>
     </div>
   </div>
 
-  <!-- Interactive Workout Logger Sheet -->
+  <!-- Set Logger Drawer -->
   <div id="sheet-modal">
     <div class="sheet-drawer">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
@@ -685,37 +742,35 @@
         <button onclick="dismissSheet()" style="background:none;border:none;color:var(--text-muted);font-weight:700;font-size:14px;">Done</button>
       </div>
       <div style="display:grid;grid-template-columns:36px 1fr 1fr 40px;gap:8px;margin-bottom:8px;font-size:11px;font-weight:700;color:var(--text-sub);text-transform:uppercase;">
-        <span>Set</span><span>Weight (kg)</span><span>Reps</span><span>Done</span>
+        <span>Set</span><span>Weight</span><span>Reps</span><span>Done</span>
       </div>
       <div id="sheet-rows"></div>
     </div>
   </div>
 
-  <!-- Bottom Navigation Bar -->
+  <!-- Dock Navigation -->
   <nav class="dock">
-    <button class="dock-tab active" onclick="switchTab('dashboard', this)">
-      <svg viewBox="0 0 24 24">
-        <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
-      </svg>
+    <button class="dock-tab active" onclick="switchPage('dashboard', this)">
+      <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
       <span>Dashboard</span>
     </button>
-    <button class="dock-tab" onclick="switchTab('workouts', this)">
-      <svg viewBox="0 0 24 24">
-        <path d="M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14l1.43 1.43L2 7.71l1.43 1.43L2 10.57 3.43 12 7 8.43 15.57 17 12 20.57 13.43 22l1.43-1.43 1.43 1.43 2.14-2.14 1.43 1.43 1.43-1.43-1.43-1.43L22 16.29z"/>
-      </svg>
+    <button class="dock-tab" onclick="switchPage('workouts', this)">
+      <svg viewBox="0 0 24 24"><path d="M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14l1.43 1.43L2 7.71l1.43 1.43L2 10.57 3.43 12 7 8.43 15.57 17 12 20.57 13.43 22l1.43-1.43 1.43 1.43 2.14-2.14 1.43 1.43 1.43-1.43-1.43-1.43L22 16.29z"/></svg>
       <span>Workouts</span>
+    </button>
+    <button class="dock-tab" onclick="switchPage('diet', this)">
+      <svg viewBox="0 0 24 24"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/></svg>
+      <span>Diet Plan</span>
+    </button>
+    <button class="dock-tab" onclick="switchPage('settings', this)">
+      <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+      <span>Settings</span>
     </button>
   </nav>
 
   <script>
-    const TARGETS = { cal: 2200, pro: 160, wat: 3.5 };
-    let appState = {
-      water: 0.0,
-      calories: 0,
-      protein: 0
-    };
-
-    const workoutData = {
+    // System Data & Default Library
+    const defaultWorkouts = {
       pushA: {
         title: "Push A — Chest, Delts & Triceps Focus",
         exercises: [
@@ -747,7 +802,7 @@
         ]
       },
       pushB: {
-        title: "Push B — Upper Chest & Shoulder Hypertrophy",
+        title: "Push B — Upper Chest & Shoulders",
         exercises: [
           { name: "Incline Barbell Bench", sets: 3, reps: "8", rest: 120 },
           { name: "Flat DB Press", sets: 3, reps: "10", rest: 90 },
@@ -757,7 +812,7 @@
         ]
       },
       pullB: {
-        title: "Pull B — Posterior Chain & Horizontal Rows",
+        title: "Pull B — Posterior Chain & Rows",
         exercises: [
           { name: "Conventional Deadlift", sets: 3, reps: "5", rest: 180 },
           { name: "Chest-Supported Row", sets: 3, reps: "10", rest: 90 },
@@ -767,7 +822,7 @@
         ]
       },
       legsB: {
-        title: "Legs B — Hamstring & Glute Focus",
+        title: "Legs B — Hamstring & Glutes",
         exercises: [
           { name: "Bulgarian Split Squats", sets: 3, reps: "10/leg", rest: 90 },
           { name: "Leg Extensions", sets: 3, reps: "15", rest: 60 },
@@ -778,43 +833,124 @@
       }
     };
 
+    let userState = {
+      targets: { cal: 2200, pro: 160, wat: 3.5 },
+      logs: { cal: 0, pro: 0, wat: 0.0 },
+      workouts: defaultWorkouts,
+      activeSplit: 'pushA',
+      profile: { name: "Mahesh", email: "", picture: "" }
+    };
+
     window.addEventListener('DOMContentLoaded', () => {
-      setTimeout(() => {
-        document.getElementById('splash').classList.add('hidden');
-      }, 700);
+      setTimeout(() => document.getElementById('splash').classList.add('hidden'), 700);
 
       const d = new Date();
       document.getElementById('label-date').innerText = d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
 
-      loadState();
-      selectSplit('pushA');
+      loadStoredData();
+      renderDashboard();
+      loadSplitView('pushA');
     });
 
-    function switchTab(view, tab) {
+    // Navigation Switcher
+    function switchPage(pageId, tabBtn) {
       document.querySelectorAll('.dock-tab').forEach(b => b.classList.remove('active'));
       document.querySelectorAll('.view-content').forEach(p => p.classList.remove('active'));
-      tab.classList.add('active');
-      document.getElementById(`view-${view}`).classList.add('active');
+      tabBtn.classList.add('active');
+      document.getElementById(`page-${pageId}`).classList.add('active');
     }
 
-    function selectSplit(key, chip) {
+    // Dashboard & Macro Ring Calculations
+    function renderDashboard() {
+      document.getElementById('disp-cal').innerText = userState.logs.cal;
+      document.getElementById('disp-pro').innerText = `${userState.logs.pro}g`;
+      document.getElementById('disp-wat').innerText = `${userState.logs.wat.toFixed(1)}L`;
+
+      document.getElementById('lbl-target-cal').innerText = `Goal: ${userState.targets.cal}`;
+      document.getElementById('lbl-target-pro').innerText = `Goal: ${userState.targets.pro}g`;
+      document.getElementById('lbl-target-wat').innerText = `Goal: ${userState.targets.wat}L`;
+
+      document.getElementById('target-cal-input').value = userState.targets.cal;
+      document.getElementById('target-pro-input').value = userState.targets.pro;
+      document.getElementById('target-wat-input').value = userState.targets.wat;
+
+      const calRatio = Math.min(userState.logs.cal / userState.targets.cal, 1);
+      const proRatio = Math.min(userState.logs.pro / userState.targets.pro, 1);
+      const watRatio = Math.min(userState.logs.wat / userState.targets.wat, 1);
+
+      document.getElementById('ring-cal').style.strokeDashoffset = 157 - (157 * calRatio);
+      document.getElementById('ring-pro').style.strokeDashoffset = 157 - (157 * proRatio);
+      document.getElementById('ring-wat').style.strokeDashoffset = 157 - (157 * watRatio);
+    }
+
+    function addWater(amt) {
+      userState.logs.wat = Math.round((userState.logs.wat + amt) * 100) / 100;
+      persistState();
+      toast(`+${amt * 1000}ml Water Added`);
+    }
+
+    function addProtein(amt) {
+      userState.logs.pro += amt;
+      persistState();
+      toast(`+${amt}g Protein Added`);
+    }
+
+    function submitIntake() {
+      const c = parseInt(document.getElementById('input-cal').value);
+      const p = parseInt(document.getElementById('input-pro').value);
+      const w = parseFloat(document.getElementById('input-water').value);
+
+      if (!isNaN(c)) userState.logs.cal += c;
+      if (!isNaN(p)) userState.logs.pro += p;
+      if (!isNaN(w)) userState.logs.wat = Math.round((userState.logs.wat + w) * 100) / 100;
+
+      document.getElementById('input-cal').value = '';
+      document.getElementById('input-pro').value = '';
+      document.getElementById('input-water').value = '';
+
+      persistState();
+      toast("Daily Intake Logged");
+    }
+
+    function resetMacros() {
+      userState.logs = { cal: 0, pro: 0, wat: 0.0 };
+      persistState();
+      toast("Counters Cleared");
+    }
+
+    function saveDietSettings() {
+      const c = parseInt(document.getElementById('target-cal-input').value);
+      const p = parseInt(document.getElementById('target-pro-input').value);
+      const w = parseFloat(document.getElementById('target-wat-input').value);
+
+      if (!isNaN(c) && c > 0) userState.targets.cal = c;
+      if (!isNaN(p) && p > 0) userState.targets.pro = p;
+      if (!isNaN(w) && w > 0) userState.targets.wat = w;
+
+      persistState();
+      toast("Diet Targets Updated");
+    }
+
+    // Workout Routine Controller
+    function loadSplitView(key, chip) {
       if (chip) {
-        document.querySelectorAll('.split-chip').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.split-chip').forEach(c => c.classList.remove('active'));
         chip.classList.add('active');
       }
-      document.getElementById('label-split-badge').innerText = key.toUpperCase();
-      const split = workoutData[key];
-      document.getElementById('heading-split').innerText = split.title;
+      userState.activeSplit = key;
+      document.getElementById('badge-split').innerText = key.toUpperCase();
+      const plan = userState.workouts[key];
+      document.getElementById('split-heading').innerText = plan.title;
 
       let html = '';
-      split.exercises.forEach(ex => {
+      plan.exercises.forEach(ex => {
         html += `
-          <div class="exercise-row" onclick="openExerciseSheet('${ex.name}', ${ex.sets}, '${ex.reps}')">
-            <div class="ex-detail">
+          <div class="exercise-card" onclick="openExerciseSheet('${ex.name}', ${ex.sets}, '${ex.reps}')">
+            <div class="ex-info">
               <h3>${ex.name}</h3>
               <p>${ex.sets} sets × ${ex.reps} reps</p>
             </div>
-            <div class="rest-pill" onclick="event.stopPropagation(); startRestTimer(${ex.rest})">
+            <div class="timer-pill" onclick="event.stopPropagation(); startRestCountdown(${ex.rest})">
               ⏱ ${ex.rest}s
             </div>
           </div>
@@ -823,132 +959,85 @@
       document.getElementById('exercise-feed').innerHTML = html;
     }
 
-    function syncRings() {
-      document.getElementById('text-cal').innerText = appState.calories;
-      document.getElementById('text-pro').innerText = `${appState.protein}g`;
-      document.getElementById('text-wat').innerText = `${appState.water.toFixed(1)}L`;
+    function promptAddExercise() {
+      const name = prompt("Exercise Name (e.g., Cable Crossover):");
+      if (!name) return;
+      const sets = parseInt(prompt("Number of sets (e.g., 3):", "3")) || 3;
+      const reps = prompt("Reps (e.g., 10-12):", "10-12") || "10";
+      const rest = parseInt(prompt("Rest period in seconds (e.g., 60):", "60")) || 60;
 
-      const calRatio = Math.min(appState.calories / TARGETS.cal, 1);
-      const proRatio = Math.min(appState.protein / TARGETS.pro, 1);
-      const watRatio = Math.min(appState.water / TARGETS.wat, 1);
-
-      document.getElementById('ring-cal').style.strokeDashoffset = 157 - (157 * calRatio);
-      document.getElementById('ring-pro').style.strokeDashoffset = 157 - (157 * proRatio);
-      document.getElementById('ring-wat').style.strokeDashoffset = 157 - (157 * watRatio);
+      userState.workouts[userState.activeSplit].exercises.push({ name, sets, reps, rest });
+      persistState();
+      loadSplitView(userState.activeSplit);
+      toast("Exercise Added");
     }
 
-    function addWater(amt) {
-      appState.water = Math.round((appState.water + amt) * 100) / 100;
-      saveState();
-      triggerToast(`+${amt * 1000}ml Water Added`);
-    }
+    // Rest Timer Engine
+    let timerId = null;
+    let timerSecs = 0;
+    let timerPaused = false;
 
-    function addProtein(amt) {
-      appState.protein += amt;
-      saveState();
-      triggerToast(`+${amt}g Protein Added`);
-    }
-
-    function logDailyIntake() {
-      const c = parseInt(document.getElementById('input-cal').value);
-      const p = parseInt(document.getElementById('input-pro').value);
-      const w = parseFloat(document.getElementById('input-water').value);
-
-      if (!isNaN(c)) appState.calories += c;
-      if (!isNaN(p)) appState.protein += p;
-      if (!isNaN(w)) appState.water = Math.round((appState.water + w) * 100) / 100;
-
-      document.getElementById('input-cal').value = '';
-      document.getElementById('input-pro').value = '';
-      document.getElementById('input-water').value = '';
-
-      saveState();
-      triggerToast("Intake Saved");
-    }
-
-    function resetDay() {
-      appState.water = 0;
-      appState.calories = 0;
-      appState.protein = 0;
-      saveState();
-      triggerToast("Counters Cleared");
-    }
-
-    function saveState() {
-      localStorage.setItem('recomp_pwa_v2', JSON.stringify(appState));
-      syncRings();
-    }
-
-    function loadState() {
-      const stored = localStorage.getItem('recomp_pwa_v2');
-      if (stored) appState = JSON.parse(stored);
-      syncRings();
-    }
-
-    let intervalId = null;
-    let secondsLeft = 0;
-    let timerRunning = false;
-
-    function startRestTimer(secs) {
-      secondsLeft = secs;
-      timerRunning = true;
+    function startRestCountdown(sec) {
+      timerSecs = sec;
+      timerPaused = false;
       document.getElementById('timer-modal').classList.add('visible');
       document.getElementById('btn-timer-toggle').innerText = "Pause";
-      paintTimer();
+      paintDigits();
 
-      clearInterval(intervalId);
-      intervalId = setInterval(() => {
-        if (timerRunning && secondsLeft > 0) {
-          secondsLeft--;
-          paintTimer();
-          if (secondsLeft === 0) {
-            clearInterval(intervalId);
-            playChime();
-            triggerToast("Rest Complete!");
+      clearInterval(timerId);
+      timerId = setInterval(() => {
+        if (!timerPaused && timerSecs > 0) {
+          timerSecs--;
+          paintDigits();
+          if (timerSecs === 0) {
+            clearInterval(timerId);
+            playAlertSound();
+            toast("Rest Finished!");
           }
         }
       }, 1000);
     }
 
-    function paintTimer() {
-      const m = Math.floor(secondsLeft / 60);
-      const s = secondsLeft % 60;
-      document.getElementById('timer-display').innerText = 
+    function paintDigits() {
+      const m = Math.floor(timerSecs / 60);
+      const s = timerSecs % 60;
+      document.getElementById('timer-digits').innerText =
         `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
     }
 
     function toggleTimer() {
-      timerRunning = !timerRunning;
-      document.getElementById('btn-timer-toggle').innerText = timerRunning ? "Pause" : "Resume";
+      timerPaused = !timerPaused;
+      document.getElementById('btn-timer-toggle').innerText = timerPaused ? "Resume" : "Pause";
     }
 
     function dismissTimer() {
-      clearInterval(intervalId);
+      clearInterval(timerId);
       document.getElementById('timer-modal').classList.remove('visible');
     }
 
-    function playChime() {
+    function playAlertSound() {
       try {
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const osc = audioCtx.createOscillator();
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(880, audioCtx.currentTime);
-        osc.connect(audioCtx.destination);
+        osc.frequency.setValueAtTime(880, ctx.currentTime);
+        osc.connect(ctx.destination);
         osc.start();
-        osc.stop(audioCtx.currentTime + 0.35);
+        osc.stop(ctx.currentTime + 0.35);
       } catch(e) {}
     }
 
-    function openExerciseSheet(name, count, repTarget) {
+    // Set Sheet Logger
+    function openExerciseSheet(name, sets, reps) {
       document.getElementById('sheet-title').innerText = name;
       let html = '';
-      for (let i = 1; i <= count; i++) {
+      for (let i = 1; i <= sets; i++) {
         html += `
-          <div class="set-grid">
-            <span class="set-idx">S${i}</span>
-            <input type="number" class="data-input" placeholder="kg" style="padding:8px 10px;font-size:13px;">
-            <input type="number" class="data-input" placeholder="${repTarget}" style="padding:8px 10px;font-size:13px;">
-            <div class="set-btn" onclick="toggleSetCheck(this)">✓</div>
+          <div class="set-row">
+            <span class="set-id">S${i}</span>
+            <input type="number" class="form-input" placeholder="kg" style="padding:8px 10px;font-size:13px;">
+            <input type="number" class="form-input" placeholder="${reps}" style="padding:8px 10px;font-size:13px;">
+            <div class="set-check" onclick="this.classList.toggle('done')">✓</div>
           </div>
         `;
       }
@@ -956,22 +1045,70 @@
       document.getElementById('sheet-modal').classList.add('visible');
     }
 
-    function toggleSetCheck(btn) {
-      btn.classList.toggle('done');
-      if (btn.classList.contains('done')) {
-        triggerToast("Set Completed");
-      }
-    }
-
     function dismissSheet() {
       document.getElementById('sheet-modal').classList.remove('visible');
     }
 
-    function triggerToast(message) {
-      const t = document.getElementById('toast');
-      t.innerText = message;
-      t.classList.add('show');
-      setTimeout(() => t.classList.remove('show'), 2000);
+    // Google Sign-In Decoupled Parser
+    function handleGoogleCredential(response) {
+      try {
+        // Base64 decode JWT token safely
+        const base64Url = response.credential.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+
+        const data = JSON.parse(jsonPayload);
+        userState.profile.name = data.given_name || data.name;
+        userState.profile.email = data.email;
+        userState.profile.picture = data.picture;
+
+        syncProfileUI();
+        persistState();
+        toast(`Signed in as ${userState.profile.name}`);
+      } catch(e) {
+        toast("Sign-In Token Received");
+      }
+    }
+
+    function syncProfileUI() {
+      document.getElementById('user-display-name').innerText = userState.profile.name;
+      if (userState.profile.picture) {
+        document.getElementById('avatar-container').innerHTML = `<img src="${userState.profile.picture}" alt="Profile">`;
+      }
+      if (userState.profile.email) {
+        document.getElementById('google-profile-info').style.display = 'block';
+        document.getElementById('user-email').innerText = `Linked: ${userState.profile.email}`;
+      }
+    }
+
+    // State Storage Helpers
+    function persistState() {
+      localStorage.setItem('recomp_master_v3', JSON.stringify(userState));
+      renderDashboard();
+    }
+
+    function loadStoredData() {
+      const raw = localStorage.getItem('recomp_master_v3');
+      if (raw) {
+        userState = JSON.parse(raw);
+        syncProfileUI();
+      }
+    }
+
+    function clearAllData() {
+      if (confirm("Reset all custom workouts and nutrition logs?")) {
+        localStorage.removeItem('recomp_master_v3');
+        location.reload();
+      }
+    }
+
+    function toast(text) {
+      const el = document.getElementById('toast');
+      el.innerText = text;
+      el.classList.add('show');
+      setTimeout(() => el.classList.remove('show'), 2000);
     }
   </script>
 </body>
