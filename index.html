@@ -564,6 +564,7 @@
 
     .cal-day-cell:active { transform: scale(0.92); }
     .cal-day-cell.today { border: 1.5px solid var(--exercise-green); }
+    .cal-day-cell.selected { border: 1.5px solid var(--move-red); }
     .cal-day-cell.inactive { opacity: 0.25; pointer-events: none; }
 
     .cal-num-label {
@@ -806,7 +807,7 @@
         <div class="large-title" id="page-title">Summary</div>
       </div>
       <div class="header-actions">
-        <!-- Apple Fitness Calendar Trigger Glyph Button -->
+        <!-- Calendar Trigger Button -->
         <button class="icon-header-btn" onclick="openCalendarModal()" title="Activity Ring Calendar">
           <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zm-7 5h5v5h-5z"/></svg>
         </button>
@@ -859,7 +860,7 @@
         </div>
       </div>
 
-      <!-- Current Weekday Mini-Rings Bar (Apple Fitness Style) -->
+      <!-- Current Weekday Mini-Rings Bar (M T W T F S S) -->
       <div class="week-rings-bar" id="week-mini-rings-track"></div>
 
       <div class="studio-grid">
@@ -1075,13 +1076,26 @@
 
   </div>
 
-  <!-- MODAL: APPLE FITNESS RING CALENDAR (MONTHLY & HISTORICAL VIEW) -->
+  <!-- MODAL: APPLE FITNESS RING CALENDAR (DYNAMIC MULTI-MONTH & YEAR VIEW) -->
   <div id="modal-calendar" class="modal-overlay">
     <div class="sheet-body">
       <div class="drag-indicator"></div>
-      <div class="sheet-nav">
-        <h3 id="cal-month-title">October 2026</h3>
-        <button class="sheet-done-btn" onclick="closeCalendarModal()">Done</button>
+      
+      <!-- Calendar Navigation Bar -->
+      <div class="sheet-nav" style="margin-bottom:6px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <h3 id="cal-month-title" style="font-size:19px;font-weight:800;">October 2026</h3>
+          <button class="pill-btn" onclick="jumpCalendarToToday()" style="font-size:10px;padding:3px 8px;">Today</button>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <button class="icon-header-btn" style="width:32px;height:32px;" onclick="changeCalendarMonth(-1)">
+            <svg style="width:14px;height:14px;" viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+          </button>
+          <button class="icon-header-btn" style="width:32px;height:32px;" onclick="changeCalendarMonth(1)">
+            <svg style="width:14px;height:14px;" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+          </button>
+          <button class="sheet-done-btn" style="margin-left:8px;" onclick="closeCalendarModal()">Done</button>
+        </div>
       </div>
 
       <div class="calendar-grid-header">
@@ -1090,7 +1104,7 @@
       <div class="calendar-days-matrix" id="cal-matrix-container"></div>
 
       <div style="font-size:12px;color:var(--label-secondary);text-align:center;padding-top:4px;">
-        Tap any day to inspect historical activity rings and logged intake.
+        Tap any day across any month/year to inspect past activity rings.
       </div>
     </div>
   </div>
@@ -1351,6 +1365,9 @@
       return state.dailyLogs[dateKey];
     }
 
+    // Dynamic Multi-Month/Year Calendar Navigation State
+    let calViewDate = new Date();
+
     // BOOT SEQUENCE
     window.addEventListener('DOMContentLoaded', () => {
       loadState();
@@ -1377,7 +1394,7 @@
       }, 700);
     });
 
-    // Weekday Mini-Rings Bar Component (M T W T F S S)
+    // Weekday Mini-Rings Bar (M T W T F S S)
     function renderWeekMiniRings() {
       const track = document.getElementById('week-mini-rings-track');
       if (!track) return;
@@ -1423,8 +1440,9 @@
       }
     }
 
-    // Monthly Ring Calendar Modal Engine
+    // Dynamic Multi-Month / Multi-Year Calendar Engine
     function openCalendarModal() {
+      calViewDate = new Date();
       document.getElementById('modal-calendar').classList.add('open');
       renderMonthlyCalendarGrid();
     }
@@ -1433,28 +1451,41 @@
       document.getElementById('modal-calendar').classList.remove('open');
     }
 
+    function changeCalendarMonth(offset) {
+      calViewDate.setMonth(calViewDate.getMonth() + offset);
+      renderMonthlyCalendarGrid();
+      triggerHaptic([20]);
+    }
+
+    function jumpCalendarToToday() {
+      calViewDate = new Date();
+      renderMonthlyCalendarGrid();
+      triggerHaptic([30]);
+    }
+
     function renderMonthlyCalendarGrid() {
       const container = document.getElementById('cal-matrix-container');
       container.innerHTML = '';
 
-      const now = new Date();
-      const year = now.getFullYear();
-      const month = now.getMonth();
+      const year = calViewDate.getFullYear();
+      const month = calViewDate.getMonth();
 
-      document.getElementById('cal-month-title').innerText = now.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+      document.getElementById('cal-month-title').innerText = 
+        calViewDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 
       const firstDayIndex = new Date(year, month, 1).getDay();
       const totalDays = new Date(year, month + 1, 0).getDate();
 
-      // Pad empty leading days
+      const realToday = new Date();
+      const isCurrentMonth = (realToday.getFullYear() === year && realToday.getMonth() === month);
+      const todayNum = realToday.getDate();
+
       for (let x = 0; x < firstDayIndex; x++) {
         const emptyCell = document.createElement('div');
         emptyCell.className = 'cal-day-cell inactive';
         container.appendChild(emptyCell);
       }
 
-      // Generate days with concentric rings
-      const todayNum = now.getDate();
       for (let day = 1; day <= totalDays; day++) {
         const key = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
         const log = getDayLog(key);
@@ -1463,8 +1494,11 @@
         const proPct = Math.min((log.pro || 0) / state.targets.pro, 1);
         const watPct = Math.min((log.wat || 0) / state.targets.wat, 1);
 
+        const isTodayCell = isCurrentMonth && (day === todayNum);
+        const isSelected = (key === getActiveDateKey());
+
         const cell = document.createElement('div');
-        cell.className = `cal-day-cell ${day === todayNum ? 'today' : ''}`;
+        cell.className = `cal-day-cell ${isTodayCell ? 'today' : ''} ${isSelected ? 'selected' : ''}`;
         cell.onclick = () => {
           selectActiveDate(key);
           closeCalendarModal();
@@ -2189,11 +2223,11 @@
     }
 
     function saveState() {
-      localStorage.setItem('apple_health_recomp_v6', JSON.stringify(state));
+      localStorage.setItem('apple_health_recomp_v7', JSON.stringify(state));
     }
 
     function loadState() {
-      const raw = localStorage.getItem('apple_health_recomp_v6');
+      const raw = localStorage.getItem('apple_health_recomp_v7');
       if (raw) {
         state = JSON.parse(raw);
         if (!state.routines) state.routines = defaultRoutines;
@@ -2214,7 +2248,7 @@
 
     function clearData() {
       if (confirm("Reset all health metrics, logs, and workout routines?")) {
-        localStorage.removeItem('apple_health_recomp_v6');
+        localStorage.removeItem('apple_health_recomp_v7');
         location.reload();
       }
     }
