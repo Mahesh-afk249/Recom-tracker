@@ -190,6 +190,28 @@
       line-height: 40px;
     }
 
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .icon-header-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--surface-1);
+      border: 0.5px solid var(--separator);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.15s ease;
+    }
+
+    .icon-header-btn:active { transform: scale(0.92); }
+    .icon-header-btn svg { width: 20px; height: 20px; fill: var(--label-secondary); }
+
     .avatar-btn {
       width: 40px;
       height: 40px;
@@ -213,9 +235,13 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 24px;
+      margin-bottom: 14px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      cursor: pointer;
+      transition: transform 0.15s ease;
     }
+
+    .rings-card:active { transform: scale(0.98); }
 
     .rings-svg-wrap {
       width: 130px;
@@ -261,6 +287,44 @@
     .legend-name { font-size: 14px; font-weight: 600; }
     .legend-val { font-size: 15px; font-weight: 700; }
     .legend-val span { font-size: 12px; color: var(--label-secondary); font-weight: 500; }
+
+    /* Weekday Mini-Rings Bar (M T W T F S S) */
+    .week-rings-bar {
+      background: var(--surface-1);
+      border-radius: 16px;
+      padding: 12px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 22px;
+    }
+
+    .week-day-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .week-day-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--label-secondary);
+    }
+
+    .week-day-col.selected .week-day-title {
+      color: var(--move-red);
+    }
+
+    .mini-rings-svg {
+      width: 36px;
+      height: 36px;
+      transform: rotate(-90deg);
+    }
+
+    .mini-ring-track { fill: none; stroke-width: 2.8; opacity: 0.2; }
+    .mini-ring-bar { fill: none; stroke-width: 2.8; stroke-linecap: round; }
 
     /* Studio Grid Layout */
     .section-title {
@@ -465,6 +529,56 @@
     .apple-btn.cyan {
       background: var(--stand-cyan);
       color: #000;
+    }
+
+    /* Monthly Rings Calendar Grid Styles */
+    .calendar-grid-header {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--label-secondary);
+      margin-bottom: 10px;
+    }
+
+    .calendar-days-matrix {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+
+    .cal-day-cell {
+      aspect-ratio: 1;
+      border-radius: 12px;
+      background: var(--surface-2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.15s ease;
+    }
+
+    .cal-day-cell:active { transform: scale(0.92); }
+    .cal-day-cell.today { border: 1.5px solid var(--exercise-green); }
+    .cal-day-cell.inactive { opacity: 0.25; pointer-events: none; }
+
+    .cal-num-label {
+      position: absolute;
+      top: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--label-primary);
+    }
+
+    .cal-rings-svg {
+      width: 32px;
+      height: 32px;
+      margin-top: 10px;
+      transform: rotate(-90deg);
     }
 
     /* Modals & Half-Sheets */
@@ -675,7 +789,7 @@
     </div>
   </div>
 
-  <!-- STEP 4: MAIN APP INTERFACE -->
+  <!-- Universal Dynamic Island Rest Pill -->
   <div id="dynamic-island-pill">
     <span style="font-size:12px;font-weight:600;color:var(--label-secondary);">REST</span>
     <span class="pill-timer-text" id="pill-readout">01:30</span>
@@ -691,14 +805,21 @@
         <div class="date-caption" id="apple-date-caption">TODAY</div>
         <div class="large-title" id="page-title">Summary</div>
       </div>
-      <div class="avatar-btn" onclick="switchTab('settings', document.querySelectorAll('.tab-item')[3])" id="avatar-container">
-        <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+      <div class="header-actions">
+        <!-- Apple Fitness Calendar Trigger Glyph Button -->
+        <button class="icon-header-btn" onclick="openCalendarModal()" title="Activity Ring Calendar">
+          <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zm-7 5h5v5h-5z"/></svg>
+        </button>
+        <div class="avatar-btn" onclick="switchTab('settings', document.querySelectorAll('.tab-item')[3])" id="avatar-container">
+          <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+        </div>
       </div>
     </header>
 
     <!-- TAB 1: SUMMARY (TODAY) -->
     <section id="view-summary" class="page-view active">
-      <div class="rings-card">
+      <!-- Main Activity Rings Hero Card -->
+      <div class="rings-card" onclick="openCalendarModal()" title="Tap to view Rings History Calendar">
         <div class="rings-svg-wrap">
           <svg viewBox="0 0 130 130">
             <!-- Calorie Ring (Outer) -->
@@ -737,6 +858,9 @@
           </div>
         </div>
       </div>
+
+      <!-- Current Weekday Mini-Rings Bar (Apple Fitness Style) -->
+      <div class="week-rings-bar" id="week-mini-rings-track"></div>
 
       <div class="studio-grid">
         <div>
@@ -949,6 +1073,26 @@
       </div>
     </section>
 
+  </div>
+
+  <!-- MODAL: APPLE FITNESS RING CALENDAR (MONTHLY & HISTORICAL VIEW) -->
+  <div id="modal-calendar" class="modal-overlay">
+    <div class="sheet-body">
+      <div class="drag-indicator"></div>
+      <div class="sheet-nav">
+        <h3 id="cal-month-title">October 2026</h3>
+        <button class="sheet-done-btn" onclick="closeCalendarModal()">Done</button>
+      </div>
+
+      <div class="calendar-grid-header">
+        <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+      </div>
+      <div class="calendar-days-matrix" id="cal-matrix-container"></div>
+
+      <div style="font-size:12px;color:var(--label-secondary);text-align:center;padding-top:4px;">
+        Tap any day to inspect historical activity rings and logged intake.
+      </div>
+    </div>
   </div>
 
   <!-- MODAL: NUTRITION ENTRY MODAL -->
@@ -1171,6 +1315,7 @@
       onboardingComplete: false,
       targets: { cal: 2200, pro: 160, wat: 3.5 },
       dailyLogs: {},
+      selectedDateKey: null,
       weightHistory: [
         { date: 'Sep 26', weight: 75.8 },
         { date: 'Sep 28', weight: 75.5 },
@@ -1190,26 +1335,30 @@
       return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
     }
 
-    function getTodayLog() {
-      const key = getTodayKey();
-      if (!state.dailyLogs[key]) {
-        state.dailyLogs[key] = {
+    function getActiveDateKey() {
+      return state.selectedDateKey || getTodayKey();
+    }
+
+    function getDayLog(dateKey) {
+      if (!state.dailyLogs[dateKey]) {
+        state.dailyLogs[dateKey] = {
           cal: 0,
           pro: 0,
           wat: 0.0,
           entries: []
         };
       }
-      return state.dailyLogs[key];
+      return state.dailyLogs[dateKey];
     }
 
     // BOOT SEQUENCE
     window.addEventListener('DOMContentLoaded', () => {
+      loadState();
+      state.selectedDateKey = getTodayKey();
+
       const d = new Date();
       const options = { weekday: 'long', month: 'short', day: 'numeric' };
       document.getElementById('apple-date-caption').innerText = d.toLocaleDateString('en-US', options).toUpperCase();
-
-      loadState();
 
       setTimeout(() => {
         const splash = document.getElementById('gate-splash');
@@ -1219,6 +1368,7 @@
           document.getElementById('gate-login').classList.remove('hidden');
         } else {
           renderRings();
+          renderWeekMiniRings();
           renderTodayMealsList();
           renderSplitSelector();
           renderWorkoutSplit();
@@ -1227,7 +1377,150 @@
       }, 700);
     });
 
-    // Nutrition Logging Modal
+    // Weekday Mini-Rings Bar Component (M T W T F S S)
+    function renderWeekMiniRings() {
+      const track = document.getElementById('week-mini-rings-track');
+      if (!track) return;
+      track.innerHTML = '';
+
+      const now = new Date();
+      const currentDay = now.getDay();
+      const startOfWeek = new Date(now);
+      const diff = now.getDate() - currentDay + (currentDay === 0 ? -6 : 1);
+      startOfWeek.setDate(diff);
+
+      const daysLetters = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+
+      for (let i = 0; i < 7; i++) {
+        const iterDate = new Date(startOfWeek);
+        iterDate.setDate(startOfWeek.getDate() + i);
+
+        const key = `${iterDate.getFullYear()}-${String(iterDate.getMonth() + 1).padStart(2, '0')}-${String(iterDate.getDate()).padStart(2, '0')}`;
+        const log = getDayLog(key);
+
+        const calPct = Math.min((log.cal || 0) / state.targets.cal, 1);
+        const proPct = Math.min((log.pro || 0) / state.targets.pro, 1);
+        const watPct = Math.min((log.wat || 0) / state.targets.wat, 1);
+
+        const isSelected = key === getActiveDateKey();
+
+        const col = document.createElement('div');
+        col.className = `week-day-col ${isSelected ? 'selected' : ''}`;
+        col.onclick = () => selectActiveDate(key);
+
+        col.innerHTML = `
+          <div class="week-day-title">${daysLetters[i]}</div>
+          <svg class="mini-rings-svg" viewBox="0 0 36 36">
+            <circle class="mini-ring-track" stroke="var(--move-red)" cx="18" cy="18" r="14"/>
+            <circle class="mini-ring-bar" stroke="var(--move-red)" cx="18" cy="18" r="14" stroke-dasharray="87.96" stroke-dashoffset="${87.96 - (87.96 * calPct)}"/>
+            <circle class="mini-ring-track" stroke="var(--exercise-green)" cx="18" cy="18" r="10.5"/>
+            <circle class="mini-ring-bar" stroke="var(--exercise-green)" cx="18" cy="18" r="10.5" stroke-dasharray="65.97" stroke-dashoffset="${65.97 - (65.97 * proPct)}"/>
+            <circle class="mini-ring-track" stroke="var(--stand-cyan)" cx="18" cy="18" r="7"/>
+            <circle class="mini-ring-bar" stroke="var(--stand-cyan)" cx="18" cy="18" r="7" stroke-dasharray="43.98" stroke-dashoffset="${43.98 - (43.98 * watPct)}"/>
+          </svg>
+        `;
+        track.appendChild(col);
+      }
+    }
+
+    // Monthly Ring Calendar Modal Engine
+    function openCalendarModal() {
+      document.getElementById('modal-calendar').classList.add('open');
+      renderMonthlyCalendarGrid();
+    }
+
+    function closeCalendarModal() {
+      document.getElementById('modal-calendar').classList.remove('open');
+    }
+
+    function renderMonthlyCalendarGrid() {
+      const container = document.getElementById('cal-matrix-container');
+      container.innerHTML = '';
+
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = now.getMonth();
+
+      document.getElementById('cal-month-title').innerText = now.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+      const firstDayIndex = new Date(year, month, 1).getDay();
+      const totalDays = new Date(year, month + 1, 0).getDate();
+
+      // Pad empty leading days
+      for (let x = 0; x < firstDayIndex; x++) {
+        const emptyCell = document.createElement('div');
+        emptyCell.className = 'cal-day-cell inactive';
+        container.appendChild(emptyCell);
+      }
+
+      // Generate days with concentric rings
+      const todayNum = now.getDate();
+      for (let day = 1; day <= totalDays; day++) {
+        const key = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const log = getDayLog(key);
+
+        const calPct = Math.min((log.cal || 0) / state.targets.cal, 1);
+        const proPct = Math.min((log.pro || 0) / state.targets.pro, 1);
+        const watPct = Math.min((log.wat || 0) / state.targets.wat, 1);
+
+        const cell = document.createElement('div');
+        cell.className = `cal-day-cell ${day === todayNum ? 'today' : ''}`;
+        cell.onclick = () => {
+          selectActiveDate(key);
+          closeCalendarModal();
+        };
+
+        cell.innerHTML = `
+          <span class="cal-num-label">${day}</span>
+          <svg class="cal-rings-svg" viewBox="0 0 32 32">
+            <circle class="mini-ring-track" stroke="var(--move-red)" cx="16" cy="16" r="12.5"/>
+            <circle class="mini-ring-bar" stroke="var(--move-red)" cx="16" cy="16" r="12.5" stroke-dasharray="78.54" stroke-dashoffset="${78.54 - (78.54 * calPct)}"/>
+            <circle class="mini-ring-track" stroke="var(--exercise-green)" cx="16" cy="16" r="9"/>
+            <circle class="mini-ring-bar" stroke="var(--exercise-green)" cx="16" cy="16" r="9" stroke-dasharray="56.55" stroke-dashoffset="${56.55 - (56.55 * proPct)}"/>
+            <circle class="mini-ring-track" stroke="var(--stand-cyan)" cx="16" cy="16" r="5.5"/>
+            <circle class="mini-ring-bar" stroke="var(--stand-cyan)" cx="16" cy="16" r="5.5" stroke-dasharray="34.56" stroke-dashoffset="${34.56 - (34.56 * watPct)}"/>
+          </svg>
+        `;
+        container.appendChild(cell);
+      }
+    }
+
+    function selectActiveDate(key) {
+      state.selectedDateKey = key;
+      const parsed = new Date(key + 'T00:00:00');
+      document.getElementById('apple-date-caption').innerText = parsed.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' }).toUpperCase();
+      renderRings();
+      renderWeekMiniRings();
+      renderTodayMealsList();
+      triggerHaptic([30]);
+    }
+
+    // Rings Render Engine
+    function renderRings() {
+      const log = getDayLog(getActiveDateKey());
+
+      document.getElementById('legend-move-text').innerHTML = `${log.cal} <span id="legend-move-target">/ ${state.targets.cal.toLocaleString()} KCAL</span>`;
+      document.getElementById('legend-pro-text').innerHTML = `${log.pro}g <span id="legend-pro-target">/ ${state.targets.pro}G</span>`;
+      document.getElementById('legend-wat-text').innerHTML = `${log.wat.toFixed(1)}L <span id="legend-wat-target">/ ${state.targets.wat}L</span>`;
+
+      document.getElementById('card-cal-val').innerText = log.cal;
+      document.getElementById('card-pro-val').innerText = log.pro;
+      document.getElementById('card-wat-val').innerText = log.wat.toFixed(1);
+
+      document.getElementById('in-target-cal').value = state.targets.cal;
+      document.getElementById('in-target-pro').value = state.targets.pro;
+      document.getElementById('in-target-wat').value = state.targets.wat;
+
+      const calPct = Math.min(log.cal / state.targets.cal, 1);
+      const proPct = Math.min(log.pro / state.targets.pro, 1);
+      const watPct = Math.min(log.wat / state.targets.wat, 1);
+
+      document.getElementById('ring-move').style.strokeDashoffset = 339.29 - (339.29 * calPct);
+      document.getElementById('ring-exercise').style.strokeDashoffset = 257.61 - (257.61 * proPct);
+      document.getElementById('ring-stand').style.strokeDashoffset = 175.93 - (175.93 * watPct);
+    }
+
+    // Dynamic Nutrition & Meal Entry
     function openNutritionModal(type) {
       document.getElementById('modal-nutrition').classList.add('open');
       document.getElementById('nutrition-modal-title').innerText = type === 'pro' ? 'Log Protein Influx' : 'Log Energy Intake';
@@ -1251,7 +1544,7 @@
         return;
       }
 
-      const log = getTodayLog();
+      const log = getDayLog(getActiveDateKey());
       log.cal += c;
       log.pro += p;
       log.entries.push({
@@ -1266,11 +1559,12 @@
       triggerHaptic([30]);
       saveState();
       renderRings();
+      renderWeekMiniRings();
       renderTodayMealsList();
       closeNutritionModal();
     }
 
-    // Dedicated Hydration Modal & Controller
+    // Dedicated Hydration Actions
     function openHydrationModal() {
       document.getElementById('modal-hydration').classList.add('open');
       document.getElementById('hydra-input-ml').value = '';
@@ -1296,7 +1590,7 @@
       }
 
       const liters = Math.round((ml / 1000) * 100) / 100;
-      const log = getTodayLog();
+      const log = getDayLog(getActiveDateKey());
       log.wat = Math.round((log.wat + liters) * 100) / 100;
       log.entries.push({
         id: Date.now(),
@@ -1310,12 +1604,13 @@
       triggerHaptic([30]);
       saveState();
       renderRings();
+      renderWeekMiniRings();
       renderTodayMealsList();
       closeHydrationModal();
     }
 
     function quickAddWater(liters, label) {
-      const log = getTodayLog();
+      const log = getDayLog(getActiveDateKey());
       log.wat = Math.round((log.wat + liters) * 100) / 100;
       log.entries.push({
         id: Date.now(),
@@ -1328,11 +1623,12 @@
       triggerHaptic([30]);
       saveState();
       renderRings();
+      renderWeekMiniRings();
       renderTodayMealsList();
     }
 
     function removeLogEntry(id) {
-      const log = getTodayLog();
+      const log = getDayLog(getActiveDateKey());
       const idx = log.entries.findIndex(e => e.id === id);
       if (idx !== -1) {
         const item = log.entries[idx];
@@ -1342,6 +1638,7 @@
         log.entries.splice(idx, 1);
         saveState();
         renderRings();
+        renderWeekMiniRings();
         renderTodayMealsList();
         triggerHaptic([30]);
       }
@@ -1349,9 +1646,9 @@
 
     function renderTodayMealsList() {
       const listEl = document.getElementById('today-meals-list');
-      const log = getTodayLog();
+      const log = getDayLog(getActiveDateKey());
       if (!log.entries || log.entries.length === 0) {
-        listEl.innerHTML = `<div class="list-row" style="color:var(--label-secondary);font-size:14px;">No intake logged today yet.</div>`;
+        listEl.innerHTML = `<div class="list-row" style="color:var(--label-secondary);font-size:14px;">No intake logged for this date.</div>`;
         return;
       }
 
@@ -1377,31 +1674,6 @@
         `;
       });
       listEl.innerHTML = html;
-    }
-
-    // Rings Render Engine
-    function renderRings() {
-      const log = getTodayLog();
-
-      document.getElementById('legend-move-text').innerHTML = `${log.cal} <span id="legend-move-target">/ ${state.targets.cal.toLocaleString()} KCAL</span>`;
-      document.getElementById('legend-pro-text').innerHTML = `${log.pro}g <span id="legend-pro-target">/ ${state.targets.pro}G</span>`;
-      document.getElementById('legend-wat-text').innerHTML = `${log.wat.toFixed(1)}L <span id="legend-wat-target">/ ${state.targets.wat}L</span>`;
-
-      document.getElementById('card-cal-val').innerText = log.cal;
-      document.getElementById('card-pro-val').innerText = log.pro;
-      document.getElementById('card-wat-val').innerText = log.wat.toFixed(1);
-
-      document.getElementById('in-target-cal').value = state.targets.cal;
-      document.getElementById('in-target-pro').value = state.targets.pro;
-      document.getElementById('in-target-wat').value = state.targets.wat;
-
-      const calPct = Math.min(log.cal / state.targets.cal, 1);
-      const proPct = Math.min(log.pro / state.targets.pro, 1);
-      const watPct = Math.min(log.wat / state.targets.wat, 1);
-
-      document.getElementById('ring-move').style.strokeDashoffset = 339.29 - (339.29 * calPct);
-      document.getElementById('ring-exercise').style.strokeDashoffset = 257.61 - (257.61 * proPct);
-      document.getElementById('ring-stand').style.strokeDashoffset = 175.93 - (175.93 * watPct);
     }
 
     // Onboarding Controllers
@@ -1450,6 +1722,7 @@
 
       document.getElementById('gate-dataentry').classList.add('hidden');
       renderRings();
+      renderWeekMiniRings();
       renderTodayMealsList();
       renderSplitSelector();
       renderWorkoutSplit();
@@ -1571,6 +1844,7 @@
 
       saveState();
       renderRings();
+      renderWeekMiniRings();
       alert("Nutrition targets updated.");
     }
 
@@ -1875,7 +2149,7 @@
       ctx.lineCap = "round";
 
       linePoints.forEach((pt, i) => {
-        if (i === 0) ctx.lineTo(pt.x, pt.y);
+        if (i === 0) ctx.moveTo(pt.x, pt.y);
         else ctx.lineTo(pt.x, pt.y);
       });
       ctx.stroke();
@@ -1915,11 +2189,11 @@
     }
 
     function saveState() {
-      localStorage.setItem('apple_health_recomp_v5', JSON.stringify(state));
+      localStorage.setItem('apple_health_recomp_v6', JSON.stringify(state));
     }
 
     function loadState() {
-      const raw = localStorage.getItem('apple_health_recomp_v5');
+      const raw = localStorage.getItem('apple_health_recomp_v6');
       if (raw) {
         state = JSON.parse(raw);
         if (!state.routines) state.routines = defaultRoutines;
@@ -1940,7 +2214,7 @@
 
     function clearData() {
       if (confirm("Reset all health metrics, logs, and workout routines?")) {
-        localStorage.removeItem('apple_health_recomp_v5');
+        localStorage.removeItem('apple_health_recomp_v6');
         location.reload();
       }
     }
