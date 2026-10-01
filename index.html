@@ -14,7 +14,6 @@
 
   <style>
     :root {
-      /* Apple HIG Dark Palette */
       --bg: #000000;
       --surface-1: #1C1C1E;
       --surface-2: #2C2C2E;
@@ -61,7 +60,7 @@
       padding: 0 16px;
     }
 
-    /* GATEWAY SCREENS (SPLASH, AUTH, ONBOARDING) */
+    /* GATEWAY SCREENS */
     .gate-screen {
       position: fixed;
       inset: 0;
@@ -81,7 +80,6 @@
       transform: scale(0.98);
     }
 
-    /* Splash Screen */
     .splash-logo-wrap {
       width: 90px;
       height: 90px;
@@ -102,7 +100,6 @@
 
     .splash-logo-wrap svg { width: 48px; height: 48px; fill: #000; }
 
-    /* Onboarding Inset Cards */
     .onboarding-card {
       background: var(--surface-1);
       border-radius: 20px;
@@ -127,7 +124,7 @@
       margin-bottom: 22px;
     }
 
-    /* Dynamic Island Pill */
+    /* Universal Floating Dynamic Island */
     #dynamic-island-pill {
       position: fixed;
       top: calc(var(--safe-top) + 6px);
@@ -594,7 +591,7 @@
     <p style="font-size:13px;color:var(--label-secondary);margin-top:6px;font-weight:600;">Hypertrophy & Macro Command</p>
   </div>
 
-  <!-- STEP 2: LOGIN GATEWAY (SHOWN ONLY TO NEW USERS) -->
+  <!-- STEP 2: LOGIN GATEWAY -->
   <div id="gate-login" class="gate-screen hidden">
     <div class="onboarding-card">
       <div class="splash-logo-wrap" style="margin:0 auto 16px auto;width:64px;height:64px;border-radius:18px;">
@@ -616,7 +613,7 @@
     </div>
   </div>
 
-  <!-- STEP 3: INITIAL DATA ENTRY (SHOWN ONLY TO NEW USERS) -->
+  <!-- STEP 3: INITIAL DATA ENTRY -->
   <div id="gate-dataentry" class="gate-screen hidden">
     <div class="onboarding-card">
       <h2 class="onboarding-title">Health Profile</h2>
@@ -712,7 +709,7 @@
         <div>
           <h2 class="section-title">Highlights</h2>
           <div class="metric-grid">
-            <div class="metric-card" onclick="quickMealLog('Lunch', 650, 45)">
+            <div class="metric-card" onclick="openNutritionModal('cal')">
               <div class="metric-top">
                 <div class="metric-icon-badge" style="background:var(--move-red);">
                   <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z"/></svg>
@@ -725,7 +722,7 @@
               </div>
             </div>
 
-            <div class="metric-card" onclick="quickMealLog('Shake', 300, 35)">
+            <div class="metric-card" onclick="openNutritionModal('pro')">
               <div class="metric-top">
                 <div class="metric-icon-badge" style="background:var(--exercise-green);">
                   <svg viewBox="0 0 24 24"><path d="M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14l1.43 1.43L2 7.71l1.43 1.43L2 10.57 3.43 12 7 8.43 15.57 17 12 20.57 13.43 22l1.43-1.43 1.43 1.43 2.14-2.14 1.43 1.43 1.43-1.43-1.43-1.43L22 16.29z"/></svg>
@@ -738,12 +735,18 @@
               </div>
             </div>
           </div>
+
+          <!-- Dynamic Today's Meals Timeline -->
+          <h2 class="section-title">Today's Meals</h2>
+          <div class="inset-list" id="today-meals-list">
+            <div class="list-row" style="color:var(--label-secondary);font-size:14px;">No intake logged today yet.</div>
+          </div>
         </div>
 
         <div>
           <h2 class="section-title">Hydration Intake</h2>
           <div class="inset-list">
-            <div class="list-row" onclick="addWater(0.25)">
+            <div class="list-row" onclick="addWaterLogged(0.25)">
               <div class="row-left">
                 <div class="row-icon-pill" style="background:var(--stand-cyan);">
                   <svg viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
@@ -759,7 +762,7 @@
               </div>
             </div>
 
-            <div class="list-row" onclick="addWater(0.50)">
+            <div class="list-row" onclick="addWaterLogged(0.50)">
               <div class="row-left">
                 <div class="row-icon-pill" style="background:var(--stand-cyan);">
                   <svg viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
@@ -779,9 +782,8 @@
       </div>
     </section>
 
-    <!-- TAB 2: WORKOUTS (DYNAMIC CUSTOM SPLIT ENGINE) -->
+    <!-- TAB 2: WORKOUTS -->
     <section id="view-workouts" class="page-view">
-      <!-- Horizontal Carousel of Available Splits -->
       <div class="split-selector-track" id="split-chips-track"></div>
 
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
@@ -886,6 +888,32 @@
       </div>
     </section>
 
+  </div>
+
+  <!-- MODAL: NUTRITION ENTRY MODAL -->
+  <div id="modal-nutrition" class="modal-overlay">
+    <div class="sheet-body">
+      <div class="drag-indicator"></div>
+      <div class="sheet-nav">
+        <h3 id="nutrition-modal-title">Log Meal Intake</h3>
+        <button class="sheet-done-btn" onclick="closeNutritionModal()">Cancel</button>
+      </div>
+      <div class="inset-list" style="margin-bottom:16px;">
+        <div class="list-row">
+          <span class="row-title">Meal Description</span>
+          <input type="text" id="nutri-meal-desc" class="apple-input" style="width:170px;text-align:left;" placeholder="e.g. Lunch / Shake">
+        </div>
+        <div class="list-row">
+          <span class="row-title">Calories (kcal)</span>
+          <input type="number" id="nutri-cal-val" class="apple-input" style="width:110px;" placeholder="0">
+        </div>
+        <div class="list-row">
+          <span class="row-title">Protein (g)</span>
+          <input type="number" id="nutri-pro-val" class="apple-input" style="width:110px;" placeholder="0">
+        </div>
+      </div>
+      <button class="apple-btn" onclick="saveNutritionEntry()">Save to Today's Log</button>
+    </div>
   </div>
 
   <!-- MODAL: SET LOGGER DRAWER -->
@@ -1050,7 +1078,7 @@
     let state = {
       onboardingComplete: false,
       targets: { cal: 2200, pro: 160, wat: 3.5 },
-      logs: { cal: 0, pro: 0, wat: 0.0 },
+      dailyLogs: {}, // Partitioned by YYYY-MM-DD
       weightHistory: [
         { date: 'Sep 26', weight: 75.8 },
         { date: 'Sep 28', weight: 75.5 },
@@ -1065,7 +1093,25 @@
       profile: { name: "User", email: "", picture: "" }
     };
 
-    // BOOT SEQUENCE: SPLASH -> AUTH -> DATAENTRY -> HOME
+    function getTodayKey() {
+      const d = new Date();
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    }
+
+    function getTodayLog() {
+      const key = getTodayKey();
+      if (!state.dailyLogs[key]) {
+        state.dailyLogs[key] = {
+          cal: 0,
+          pro: 0,
+          wat: 0.0,
+          entries: [] // { id, name, cal, pro, time }
+        };
+      }
+      return state.dailyLogs[key];
+    }
+
+    // BOOT SEQUENCE
     window.addEventListener('DOMContentLoaded', () => {
       const d = new Date();
       const options = { weekday: 'long', month: 'short', day: 'numeric' };
@@ -1073,23 +1119,152 @@
 
       loadState();
 
-      // Check user authentication & onboarding status
       setTimeout(() => {
         const splash = document.getElementById('gate-splash');
         splash.classList.add('hidden');
 
         if (!state.onboardingComplete) {
-          // New User: Route to Login Gate
           document.getElementById('gate-login').classList.remove('hidden');
         } else {
-          // Returning User: Load all cached user data directly
           renderRings();
+          renderTodayMealsList();
           renderSplitSelector();
           renderWorkoutSplit();
           updateAnalyticsUI();
         }
       }, 700);
     });
+
+    // Dynamic Nutrition Logging Modal
+    function openNutritionModal(type) {
+      document.getElementById('modal-nutrition').classList.add('open');
+      document.getElementById('nutrition-modal-title').innerText = type === 'pro' ? 'Log Protein Influx' : 'Log Energy Intake';
+      document.getElementById('nutri-meal-desc').value = '';
+      document.getElementById('nutri-cal-val').value = '';
+      document.getElementById('nutri-pro-val').value = '';
+      document.getElementById(type === 'pro' ? 'nutri-pro-val' : 'nutri-cal-val').focus();
+    }
+
+    function closeNutritionModal() {
+      document.getElementById('modal-nutrition').classList.remove('open');
+    }
+
+    function saveNutritionEntry() {
+      const desc = document.getElementById('nutri-meal-desc').value.trim() || 'Meal Entry';
+      const c = parseInt(document.getElementById('nutri-cal-val').value) || 0;
+      const p = parseInt(document.getElementById('nutri-pro-val').value) || 0;
+
+      if (c === 0 && p === 0) {
+        alert("Please specify calories or protein.");
+        return;
+      }
+
+      const log = getTodayLog();
+      log.cal += c;
+      log.pro += p;
+      log.entries.push({
+        id: Date.now(),
+        name: desc,
+        cal: c,
+        pro: p,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      });
+
+      triggerHaptic([30]);
+      saveState();
+      renderRings();
+      renderTodayMealsList();
+      closeNutritionModal();
+    }
+
+    function addWaterLogged(amt) {
+      const log = getTodayLog();
+      log.wat = Math.round((log.wat + amt) * 100) / 100;
+      log.entries.push({
+        id: Date.now(),
+        name: `${amt >= 0.5 ? 'Hydration Bottle' : 'Glass of Water'}`,
+        cal: 0,
+        pro: 0,
+        wat: amt,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      });
+      triggerHaptic([30]);
+      saveState();
+      renderRings();
+      renderTodayMealsList();
+    }
+
+    function removeLogEntry(id) {
+      const log = getTodayLog();
+      const idx = log.entries.findIndex(e => e.id === id);
+      if (idx !== -1) {
+        const item = log.entries[idx];
+        log.cal = Math.max(0, log.cal - (item.cal || 0));
+        log.pro = Math.max(0, log.pro - (item.pro || 0));
+        log.wat = Math.max(0, Math.round((log.wat - (item.wat || 0)) * 100) / 100);
+        log.entries.splice(idx, 1);
+        saveState();
+        renderRings();
+        renderTodayMealsList();
+        triggerHaptic([30]);
+      }
+    }
+
+    function renderTodayMealsList() {
+      const listEl = document.getElementById('today-meals-list');
+      const log = getTodayLog();
+      if (!log.entries || log.entries.length === 0) {
+        listEl.innerHTML = `<div class="list-row" style="color:var(--label-secondary);font-size:14px;">No intake logged today yet.</div>`;
+        return;
+      }
+
+      let html = '';
+      [...log.entries].reverse().forEach(entry => {
+        let metricsDesc = [];
+        if (entry.cal) metricsDesc.push(`${entry.cal} kcal`);
+        if (entry.pro) metricsDesc.push(`${entry.pro}g protein`);
+        if (entry.wat) metricsDesc.push(`+${entry.wat}L water`);
+
+        html += `
+          <div class="list-row">
+            <div class="row-left">
+              <div>
+                <div class="row-title">${entry.name}</div>
+                <div class="row-sub">${entry.time} · ${metricsDesc.join(' · ')}</div>
+              </div>
+            </div>
+            <div class="row-right" onclick="removeLogEntry(${entry.id})">
+              <span style="color:var(--move-red);font-size:17px;font-weight:700;padding:4px 8px;">✕</span>
+            </div>
+          </div>
+        `;
+      });
+      listEl.innerHTML = html;
+    }
+
+    // Rings Render Engine
+    function renderRings() {
+      const log = getTodayLog();
+
+      document.getElementById('legend-move-text').innerHTML = `${log.cal} <span id="legend-move-target">/ ${state.targets.cal.toLocaleString()} KCAL</span>`;
+      document.getElementById('legend-pro-text').innerHTML = `${log.pro}g <span id="legend-pro-target">/ ${state.targets.pro}G</span>`;
+      document.getElementById('legend-wat-text').innerHTML = `${log.wat.toFixed(1)}L <span id="legend-wat-target">/ ${state.targets.wat}L</span>`;
+
+      document.getElementById('card-cal-val').innerText = log.cal;
+      document.getElementById('card-pro-val').innerText = log.pro;
+
+      document.getElementById('in-target-cal').value = state.targets.cal;
+      document.getElementById('in-target-pro').value = state.targets.pro;
+      document.getElementById('in-target-wat').value = state.targets.wat;
+
+      const calPct = Math.min(log.cal / state.targets.cal, 1);
+      const proPct = Math.min(log.pro / state.targets.pro, 1);
+      const watPct = Math.min(log.wat / state.targets.wat, 1);
+
+      document.getElementById('ring-move').style.strokeDashoffset = 339.29 - (339.29 * calPct);
+      document.getElementById('ring-exercise').style.strokeDashoffset = 257.61 - (257.61 * proPct);
+      document.getElementById('ring-stand').style.strokeDashoffset = 175.93 - (175.93 * watPct);
+    }
 
     // Onboarding Controllers
     function handleGateGoogleLogin(response) {
@@ -1135,9 +1310,9 @@
 
       saveState();
 
-      // Hide onboarding gate and load main UI
       document.getElementById('gate-dataentry').classList.add('hidden');
       renderRings();
+      renderTodayMealsList();
       renderSplitSelector();
       renderWorkoutSplit();
       updateAnalyticsUI();
@@ -1189,7 +1364,6 @@
       document.getElementById('workout-exercise-feed').innerHTML = html;
     }
 
-    // Modal Operations for Custom Splits and Exercises
     function openCreateSplitModal() {
       document.getElementById('modal-create-split').classList.add('open');
     }
@@ -1246,43 +1420,6 @@
         updateAnalyticsUI();
         requestAnimationFrame(() => setTimeout(drawWeightChart, 100));
       }
-    }
-
-    // Rings Render Engine
-    function renderRings() {
-      document.getElementById('legend-move-text').innerHTML = `${state.logs.cal} <span id="legend-move-target">/ ${state.targets.cal.toLocaleString()} KCAL</span>`;
-      document.getElementById('legend-pro-text').innerHTML = `${state.logs.pro}g <span id="legend-pro-target">/ ${state.targets.pro}G</span>`;
-      document.getElementById('legend-wat-text').innerHTML = `${state.logs.wat.toFixed(1)}L <span id="legend-wat-target">/ ${state.targets.wat}L</span>`;
-
-      document.getElementById('card-cal-val').innerText = state.logs.cal;
-      document.getElementById('card-pro-val').innerText = state.logs.pro;
-
-      document.getElementById('in-target-cal').value = state.targets.cal;
-      document.getElementById('in-target-pro').value = state.targets.pro;
-      document.getElementById('in-target-wat').value = state.targets.wat;
-
-      const calPct = Math.min(state.logs.cal / state.targets.cal, 1);
-      const proPct = Math.min(state.logs.pro / state.targets.pro, 1);
-      const watPct = Math.min(state.logs.wat / state.targets.wat, 1);
-
-      document.getElementById('ring-move').style.strokeDashoffset = 339.29 - (339.29 * calPct);
-      document.getElementById('ring-exercise').style.strokeDashoffset = 257.61 - (257.61 * proPct);
-      document.getElementById('ring-stand').style.strokeDashoffset = 175.93 - (175.93 * watPct);
-    }
-
-    function quickMealLog(type, cal, pro) {
-      state.logs.cal += cal;
-      state.logs.pro += pro;
-      triggerHaptic([30]);
-      saveState();
-      renderRings();
-    }
-
-    function addWater(liters) {
-      state.logs.wat = Math.round((state.logs.wat + liters) * 100) / 100;
-      triggerHaptic([30]);
-      saveState();
-      renderRings();
     }
 
     function saveTargetSettings() {
@@ -1640,14 +1777,15 @@
     }
 
     function saveState() {
-      localStorage.setItem('apple_health_recomp_v4', JSON.stringify(state));
+      localStorage.setItem('apple_health_recomp_v5', JSON.stringify(state));
     }
 
     function loadState() {
-      const raw = localStorage.getItem('apple_health_recomp_v4');
+      const raw = localStorage.getItem('apple_health_recomp_v5');
       if (raw) {
         state = JSON.parse(raw);
         if (!state.routines) state.routines = defaultRoutines;
+        if (!state.dailyLogs) state.dailyLogs = {};
         syncProfileUI();
       }
     }
@@ -1663,8 +1801,8 @@
     }
 
     function clearData() {
-      if (confirm("Reset all health metrics and workout routines?")) {
-        localStorage.removeItem('apple_health_recomp_v4');
+      if (confirm("Reset all health metrics, logs, and workout routines?")) {
+        localStorage.removeItem('apple_health_recomp_v5');
         location.reload();
       }
     }
