@@ -21,13 +21,11 @@
       --surface-3: #3A3A3C;
       --separator: rgba(84, 84, 88, 0.45);
 
-      /* Semantic Activity Spectrum */
       --move-red: #FA114F;
       --exercise-green: #A1FF00;
       --stand-cyan: #00F0FF;
       --macro-amber: #FF9F0A;
 
-      /* Typography Labels */
       --label-primary: #FFFFFF;
       --label-secondary: #8E8E93;
       --label-tertiary: #48484A;
@@ -63,7 +61,73 @@
       padding: 0 16px;
     }
 
-    /* Universal Floating Dynamic Island */
+    /* GATEWAY SCREENS (SPLASH, AUTH, ONBOARDING) */
+    .gate-screen {
+      position: fixed;
+      inset: 0;
+      background: #000000;
+      z-index: 20000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      transition: opacity 0.4s var(--spring), transform 0.4s var(--spring);
+    }
+
+    .gate-screen.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(0.98);
+    }
+
+    /* Splash Screen */
+    .splash-logo-wrap {
+      width: 90px;
+      height: 90px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, var(--move-red), var(--macro-amber));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 50px rgba(250, 17, 79, 0.4);
+      margin-bottom: 20px;
+      animation: pulse 1.8s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.96); box-shadow: 0 0 25px rgba(250, 17, 79, 0.3); }
+      100% { transform: scale(1.02); box-shadow: 0 0 55px rgba(250, 17, 79, 0.6); }
+    }
+
+    .splash-logo-wrap svg { width: 48px; height: 48px; fill: #000; }
+
+    /* Onboarding Inset Cards */
+    .onboarding-card {
+      background: var(--surface-1);
+      border-radius: 20px;
+      padding: 24px 20px;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    }
+
+    .onboarding-title {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.6px;
+      text-align: center;
+      margin-bottom: 6px;
+    }
+
+    .onboarding-sub {
+      font-size: 13px;
+      color: var(--label-secondary);
+      text-align: center;
+      margin-bottom: 22px;
+    }
+
+    /* Dynamic Island Pill */
     #dynamic-island-pill {
       position: fixed;
       top: calc(var(--safe-top) + 6px);
@@ -144,7 +208,7 @@
     .avatar-btn img { width: 100%; height: 100%; object-fit: cover; }
     .avatar-btn svg { width: 22px; height: 22px; fill: var(--label-secondary); }
 
-    /* Hero Rings Card */
+    /* Concentric Activity Rings Hero Card */
     .rings-card {
       background: var(--surface-1);
       border-radius: 20px;
@@ -201,7 +265,7 @@
     .legend-val { font-size: 15px; font-weight: 700; }
     .legend-val span { font-size: 12px; color: var(--label-secondary); font-weight: 500; }
 
-    /* Responsive Section Layout */
+    /* Studio Grid Layout */
     .section-title {
       font-size: 20px;
       font-weight: 700;
@@ -310,6 +374,36 @@
 
     .chevron { width: 14px; height: 14px; fill: var(--label-tertiary); }
 
+    /* Horizontal Split Selection Carousel */
+    .split-selector-track {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+      scrollbar-width: none;
+    }
+    .split-selector-track::-webkit-scrollbar { display: none; }
+
+    .split-pill-chip {
+      background: var(--surface-1);
+      border: 1px solid var(--separator);
+      border-radius: 9999px;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--label-secondary);
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.2s var(--spring);
+    }
+
+    .split-pill-chip.active {
+      background: var(--exercise-green);
+      color: #000;
+      border-color: var(--exercise-green);
+    }
+
     /* Apple Inputs & Buttons */
     .apple-input {
       background: var(--surface-2);
@@ -338,14 +432,19 @@
 
     .apple-btn:active { transform: scale(0.98); }
 
-    /* Half-Sheet Modals */
-    #sheet-modal {
+    .apple-btn.secondary {
+      background: var(--surface-2);
+      color: var(--label-primary);
+    }
+
+    /* Modals & Half-Sheets */
+    .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      z-index: 9999;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      z-index: 10005;
       display: flex;
       align-items: flex-end;
       opacity: 0;
@@ -353,7 +452,7 @@
       transition: opacity 0.25s, visibility 0.25s;
     }
 
-    #sheet-modal.open { opacity: 1; visibility: visible; }
+    .modal-overlay.open { opacity: 1; visibility: visible; }
 
     .sheet-body {
       background: var(--surface-1);
@@ -368,7 +467,7 @@
       overflow-y: auto;
     }
 
-    #sheet-modal.open .sheet-body { transform: translateY(0); }
+    .modal-overlay.open .sheet-body { transform: translateY(0); }
 
     .drag-indicator {
       width: 36px;
@@ -395,7 +494,6 @@
       cursor: pointer;
     }
 
-    /* Set Table Layout with Set Tags */
     .set-table-row {
       display: grid;
       grid-template-columns: 36px 1fr 1fr 40px;
@@ -444,7 +542,7 @@
       color: #000;
     }
 
-    /* Native Tab Bar */
+    /* Tab Bar */
     .apple-tabbar {
       position: fixed;
       bottom: 0;
@@ -487,7 +585,67 @@
 </head>
 <body>
 
-  <!-- Universal Dynamic Island Rest Pill -->
+  <!-- STEP 1: SPLASH SCREEN -->
+  <div id="gate-splash" class="gate-screen">
+    <div class="splash-logo-wrap">
+      <svg viewBox="0 0 24 24"><path d="M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14l1.43 1.43L2 7.71l1.43 1.43L2 10.57 3.43 12 7 8.43 15.57 17 12 20.57 13.43 22l1.43-1.43 1.43 1.43 2.14-2.14 1.43 1.43 1.43-1.43-1.43-1.43L22 16.29z"/></svg>
+    </div>
+    <h1 style="font-size:28px;font-weight:800;letter-spacing:-0.6px;">RECOMP OS</h1>
+    <p style="font-size:13px;color:var(--label-secondary);margin-top:6px;font-weight:600;">Hypertrophy & Macro Command</p>
+  </div>
+
+  <!-- STEP 2: LOGIN GATEWAY (SHOWN ONLY TO NEW USERS) -->
+  <div id="gate-login" class="gate-screen hidden">
+    <div class="onboarding-card">
+      <div class="splash-logo-wrap" style="margin:0 auto 16px auto;width:64px;height:64px;border-radius:18px;">
+        <svg style="width:34px;height:34px;" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+      </div>
+      <h2 class="onboarding-title">Welcome to Recomp</h2>
+      <p class="onboarding-sub">Authenticate your identity to link progressive records and cloud backups.</p>
+
+      <div id="g_id_onload"
+           data-client_id="298118306280-r938avqbhjc6ao2vs8g3not14jife504.apps.googleusercontent.com"
+           data-context="signin"
+           data-ux_mode="popup"
+           data-callback="handleGateGoogleLogin"
+           data-auto_prompt="false">
+      </div>
+      <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="filled_black" data-text="signin_with" data-size="large" data-logo_alignment="center" style="margin-bottom:12px;width:100%;"></div>
+
+      <button class="apple-btn secondary" onclick="proceedAsGuest()">Continue as Guest</button>
+    </div>
+  </div>
+
+  <!-- STEP 3: INITIAL DATA ENTRY (SHOWN ONLY TO NEW USERS) -->
+  <div id="gate-dataentry" class="gate-screen hidden">
+    <div class="onboarding-card">
+      <h2 class="onboarding-title">Health Profile</h2>
+      <p class="onboarding-sub">Set up your initial benchmarks to calibrate your activity rings and hypertrophy split.</p>
+
+      <div class="inset-list" style="margin-bottom:16px;">
+        <div class="list-row">
+          <span class="row-title">Current Weight (kg)</span>
+          <input type="number" step="0.1" id="init-weight" class="apple-input" style="width:100px;" value="75.0">
+        </div>
+        <div class="list-row">
+          <span class="row-title">Daily Calories (kcal)</span>
+          <input type="number" id="init-cal" class="apple-input" style="width:100px;" value="2200">
+        </div>
+        <div class="list-row">
+          <span class="row-title">Daily Protein (g)</span>
+          <input type="number" id="init-pro" class="apple-input" style="width:100px;" value="160">
+        </div>
+        <div class="list-row">
+          <span class="row-title">Daily Water (L)</span>
+          <input type="number" step="0.25" id="init-wat" class="apple-input" style="width:100px;" value="3.5">
+        </div>
+      </div>
+
+      <button class="apple-btn" onclick="completeOnboarding()">Initialize Recomp OS</button>
+    </div>
+  </div>
+
+  <!-- STEP 4: MAIN APP INTERFACE -->
   <div id="dynamic-island-pill">
     <span style="font-size:12px;font-weight:600;color:var(--label-secondary);">REST</span>
     <span class="pill-timer-text" id="pill-readout">01:30</span>
@@ -497,7 +655,7 @@
 
   <div class="app-viewport">
     
-    <!-- Top Large Navigation Header -->
+    <!-- Top Navigation Header -->
     <header class="nav-header">
       <div>
         <div class="date-caption" id="apple-date-caption">TODAY</div>
@@ -513,13 +671,13 @@
       <div class="rings-card">
         <div class="rings-svg-wrap">
           <svg viewBox="0 0 130 130">
-            <!-- Calorie Ring (Outer, r=54, C=339.29) -->
+            <!-- Calorie Ring (Outer) -->
             <circle class="ring-track" stroke="var(--move-red)" cx="65" cy="65" r="54"/>
             <circle id="ring-move" class="ring-bar" stroke="var(--move-red)" cx="65" cy="65" r="54" stroke-dasharray="339.29" stroke-dashoffset="339.29"/>
-            <!-- Protein Ring (Middle, r=41, C=257.61) -->
+            <!-- Protein Ring (Middle) -->
             <circle class="ring-track" stroke="var(--exercise-green)" cx="65" cy="65" r="41"/>
             <circle id="ring-exercise" class="ring-bar" stroke="var(--exercise-green)" cx="65" cy="65" r="41" stroke-dasharray="257.61" stroke-dashoffset="257.61"/>
-            <!-- Hydration Ring (Inner, r=28, C=175.93) -->
+            <!-- Hydration Ring (Inner) -->
             <circle class="ring-track" stroke="var(--stand-cyan)" cx="65" cy="65" r="28"/>
             <circle id="ring-stand" class="ring-bar" stroke="var(--stand-cyan)" cx="65" cy="65" r="28" stroke-dasharray="175.93" stroke-dashoffset="175.93"/>
           </svg>
@@ -621,17 +779,23 @@
       </div>
     </section>
 
-    <!-- TAB 2: WORKOUTS -->
+    <!-- TAB 2: WORKOUTS (DYNAMIC CUSTOM SPLIT ENGINE) -->
     <section id="view-workouts" class="page-view">
+      <!-- Horizontal Carousel of Available Splits -->
+      <div class="split-selector-track" id="split-chips-track"></div>
+
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-        <h2 class="section-title" id="active-split-heading" style="margin:0;">Push A — Chest & Triceps</h2>
-        <button style="background:none;border:none;color:var(--move-red);font-size:15px;font-weight:600;cursor:pointer;" onclick="cycleSplit()">Next Split</button>
+        <h2 class="section-title" id="active-split-heading" style="margin:0;">Push A</h2>
+        <div style="display:flex;gap:12px;">
+          <button style="background:none;border:none;color:var(--stand-cyan);font-size:15px;font-weight:600;cursor:pointer;" onclick="openAddExerciseModal()">+ Add Exercise</button>
+          <button style="background:none;border:none;color:var(--move-red);font-size:15px;font-weight:600;cursor:pointer;" onclick="openCreateSplitModal()">+ New Split</button>
+        </div>
       </div>
 
       <div class="inset-list" id="workout-exercise-feed"></div>
     </section>
 
-    <!-- TAB 3: ANALYTICS & RECOMP TDEE -->
+    <!-- TAB 3: ANALYTICS -->
     <section id="view-analytics" class="page-view">
       <div class="studio-grid">
         <div>
@@ -670,7 +834,7 @@
             <div class="list-row">
               <div class="row-left">
                 <div class="row-title">Recommended Deficit</div>
-                <div class="row-sub">Calculated for lean recomposition</div>
+                <div class="row-sub">Targeted recomp pace</div>
               </div>
               <div class="row-right" style="color:var(--move-red);font-weight:700;">-300 kcal</div>
             </div>
@@ -679,7 +843,7 @@
       </div>
     </section>
 
-    <!-- TAB 4: VAULT & SETTINGS -->
+    <!-- TAB 4: SETTINGS & VAULT -->
     <section id="view-settings" class="page-view">
       <div class="studio-grid">
         <div>
@@ -702,22 +866,13 @@
         </div>
 
         <div>
-          <h2 class="section-title" style="margin-top:0;">Google Identity</h2>
+          <h2 class="section-title" style="margin-top:0;">Identity & Account</h2>
           <div class="inset-list" style="padding:16px;">
-            <div id="g_id_onload"
-                 data-client_id="298118306280-r938avqbhjc6ao2vs8g3not14jife504.apps.googleusercontent.com"
-                 data-context="signin"
-                 data-ux_mode="popup"
-                 data-callback="handleGoogleCredential"
-                 data-auto_prompt="false">
-            </div>
-            <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="filled_black" data-text="signin_with" data-size="large" data-logo_alignment="left"></div>
-            <div id="profile-card" style="display:none;margin-top:14px;font-size:14px;color:var(--exercise-green);font-weight:600;">
-              <span id="linked-email"></span>
-            </div>
+            <p id="profile-status-desc" style="font-size:13px;color:var(--label-secondary);margin-bottom:12px;">Logged in locally.</p>
+            <div id="settings-google-signin-btn"></div>
           </div>
 
-          <h2 class="section-title">Data Backup</h2>
+          <h2 class="section-title">Data Vault</h2>
           <div class="inset-list">
             <div class="list-row" onclick="exportDataJSON()">
               <div class="row-left"><div class="row-title">Export Backup (.JSON)</div></div>
@@ -733,8 +888,8 @@
 
   </div>
 
-  <!-- iOS Half-Sheet Logger Modal -->
-  <div id="sheet-modal">
+  <!-- MODAL: SET LOGGER DRAWER -->
+  <div id="sheet-modal" class="modal-overlay">
     <div class="sheet-body">
       <div class="drag-indicator"></div>
       <div class="sheet-nav">
@@ -742,13 +897,11 @@
         <button class="sheet-done-btn" onclick="closeSheet()">Done</button>
       </div>
 
-      <!-- Quick Metrics Summary Inside Sheet -->
       <div style="display:flex;justify-content:space-between;margin-bottom:12px;font-size:12px;font-weight:700;">
         <span style="color:var(--exercise-green);">VOLUME: <span id="sheet-vol">0</span> KG</span>
         <span style="color:var(--macro-amber);">EST. 1RM: <span id="sheet-1rm">--</span> KG</span>
       </div>
 
-      <!-- Plate Math Breakdown & Warmup Ladder -->
       <div style="background:var(--surface-2);border-radius:12px;padding:10px 14px;margin-bottom:14px;font-size:11.5px;color:var(--label-secondary);">
         <div>Plates / side (20kg bar): <span id="plate-spec" style="color:#FFF;font-weight:700;">--</span></div>
         <div style="margin-top:4px;">Warmup Ladder: <span id="warmup-ladder" style="color:var(--stand-cyan);font-weight:600;">--</span></div>
@@ -759,6 +912,54 @@
       </div>
 
       <div id="sheet-sets-container"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: CREATE CUSTOM SPLIT -->
+  <div id="modal-create-split" class="modal-overlay">
+    <div class="sheet-body">
+      <div class="drag-indicator"></div>
+      <div class="sheet-nav">
+        <h3>Create Training Split</h3>
+        <button class="sheet-done-btn" onclick="closeCreateSplitModal()">Cancel</button>
+      </div>
+      <div class="inset-list" style="margin-bottom:16px;">
+        <div class="list-row">
+          <span class="row-title">Split Title</span>
+          <input type="text" id="custom-split-name" class="apple-input" style="width:180px;text-align:left;" placeholder="e.g. Upper Power">
+        </div>
+      </div>
+      <button class="apple-btn" onclick="submitNewSplit()">Save New Split</button>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD CUSTOM EXERCISE -->
+  <div id="modal-add-exercise" class="modal-overlay">
+    <div class="sheet-body">
+      <div class="drag-indicator"></div>
+      <div class="sheet-nav">
+        <h3>Add Exercise to Split</h3>
+        <button class="sheet-done-btn" onclick="closeAddExerciseModal()">Cancel</button>
+      </div>
+      <div class="inset-list" style="margin-bottom:16px;">
+        <div class="list-row">
+          <span class="row-title">Exercise Name</span>
+          <input type="text" id="custom-ex-name" class="apple-input" style="width:160px;text-align:left;" placeholder="Incline DB Press">
+        </div>
+        <div class="list-row">
+          <span class="row-title">Working Sets</span>
+          <input type="number" id="custom-ex-sets" class="apple-input" style="width:80px;" value="3">
+        </div>
+        <div class="list-row">
+          <span class="row-title">Target Reps</span>
+          <input type="text" id="custom-ex-reps" class="apple-input" style="width:80px;" value="8-10">
+        </div>
+        <div class="list-row">
+          <span class="row-title">Rest (Seconds)</span>
+          <input type="number" id="custom-ex-rest" class="apple-input" style="width:80px;" value="90">
+        </div>
+      </div>
+      <button class="apple-btn" onclick="submitNewExercise()">Add to Routine</button>
     </div>
   </div>
 
@@ -783,19 +984,19 @@
   </nav>
 
   <script>
-    const workoutDatabase = {
+    const defaultRoutines = {
       pushA: {
-        title: "Push A — Chest & Triceps Focus",
+        title: "Push A — Chest & Triceps",
         exercises: [
           { name: "Barbell Bench Press", sets: 3, reps: "6-8", rest: 120 },
           { name: "Incline DB Press", sets: 3, reps: "8-10", rest: 90 },
-          { name: "Standing Overhead Press", sets: 3, reps: "8-10", rest: 90 },
+          { name: "Overhead DB Press", sets: 3, reps: "8-10", rest: 90 },
           { name: "Cable Lateral Raises", sets: 4, reps: "12-15", rest: 60 },
-          { name: "Cable Tricep Pushdowns", sets: 3, reps: "12", rest: 60 }
+          { name: "Tricep Pushdowns", sets: 3, reps: "12", rest: 60 }
         ]
       },
       pullA: {
-        title: "Pull A — Back & Biceps Focus",
+        title: "Pull A — Vertical Lat & Biceps",
         exercises: [
           { name: "Lat Pulldown", sets: 3, reps: "8-10", rest: 120 },
           { name: "Seated Cable Row", sets: 3, reps: "10-12", rest: 90 },
@@ -805,7 +1006,7 @@
         ]
       },
       legsA: {
-        title: "Legs A — Quads & Posterior Chain",
+        title: "Legs A — Quad Dominant & Calves",
         exercises: [
           { name: "Barbell Back Squats", sets: 3, reps: "6-8", rest: 150 },
           { name: "Romanian Deadlifts", sets: 3, reps: "8-10", rest: 120 },
@@ -813,10 +1014,41 @@
           { name: "Lying Leg Curls", sets: 3, reps: "15", rest: 60 },
           { name: "Standing Calf Raises", sets: 4, reps: "15", rest: 45 }
         ]
+      },
+      pushB: {
+        title: "Push B — Delts & Incline Pecs",
+        exercises: [
+          { name: "Incline Barbell Bench", sets: 3, reps: "8-10", rest: 120 },
+          { name: "Flat DB Flyes", sets: 3, reps: "12", rest: 60 },
+          { name: "Standing Overhead Press", sets: 3, reps: "8", rest: 90 },
+          { name: "Cable Lateral Raises", sets: 4, reps: "15", rest: 60 },
+          { name: "Skull Crushers", sets: 3, reps: "12", rest: 60 }
+        ]
+      },
+      pullB: {
+        title: "Pull B — Upper Back & Deadlifts",
+        exercises: [
+          { name: "Conventional Deadlift", sets: 3, reps: "5", rest: 180 },
+          { name: "Chest-Supported Row", sets: 3, reps: "10", rest: 90 },
+          { name: "Close-Grip Pulldown", sets: 3, reps: "10", rest: 90 },
+          { name: "Rear Delt Flyes", sets: 4, reps: "15", rest: 60 },
+          { name: "Hammer Curls", sets: 3, reps: "12", rest: 60 }
+        ]
+      },
+      legsB: {
+        title: "Legs B — Hamstring & Hip Thrust",
+        exercises: [
+          { name: "Barbell Hip Thrust", sets: 3, reps: "10", rest: 120 },
+          { name: "Bulgarian Split Squats", sets: 3, reps: "10/leg", rest: 90 },
+          { name: "Leg Extensions", sets: 3, reps: "15", rest: 60 },
+          { name: "Seated Leg Curls", sets: 3, reps: "12", rest: 60 },
+          { name: "Seated Calf Raises", sets: 4, reps: "15", rest: 45 }
+        ]
       }
     };
 
     let state = {
+      onboardingComplete: false,
       targets: { cal: 2200, pro: 160, wat: 3.5 },
       logs: { cal: 0, pro: 0, wat: 0.0 },
       weightHistory: [
@@ -825,25 +1057,182 @@
         { date: 'Sep 30', weight: 75.2 },
         { date: 'Oct 2', weight: 75.0 }
       ],
+      routines: defaultRoutines,
       exerciseHistory: {},
       exerciseBest1RM: {},
       totalTonnage: 0,
       activeSplit: 'pushA',
-      profile: { name: "Mahesh", email: "", picture: "" }
+      profile: { name: "User", email: "", picture: "" }
     };
 
+    // BOOT SEQUENCE: SPLASH -> AUTH -> DATAENTRY -> HOME
     window.addEventListener('DOMContentLoaded', () => {
       const d = new Date();
       const options = { weekday: 'long', month: 'short', day: 'numeric' };
       document.getElementById('apple-date-caption').innerText = d.toLocaleDateString('en-US', options).toUpperCase();
 
       loadState();
-      renderRings();
-      renderWorkoutSplit();
-      updateAnalyticsUI();
+
+      // Check user authentication & onboarding status
+      setTimeout(() => {
+        const splash = document.getElementById('gate-splash');
+        splash.classList.add('hidden');
+
+        if (!state.onboardingComplete) {
+          // New User: Route to Login Gate
+          document.getElementById('gate-login').classList.remove('hidden');
+        } else {
+          // Returning User: Load all cached user data directly
+          renderRings();
+          renderSplitSelector();
+          renderWorkoutSplit();
+          updateAnalyticsUI();
+        }
+      }, 700);
     });
 
-    // Native Tab Switcher with Canvas Redraw Trigger
+    // Onboarding Controllers
+    function handleGateGoogleLogin(response) {
+      try {
+        const base64Url = response.credential.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
+        const user = JSON.parse(jsonPayload);
+
+        state.profile.name = user.given_name || user.name;
+        state.profile.email = user.email;
+        state.profile.picture = user.picture;
+
+        syncProfileUI();
+        triggerHaptic([40, 40]);
+        advanceToDataEntry();
+      } catch(e) {
+        advanceToDataEntry();
+      }
+    }
+
+    function proceedAsGuest() {
+      state.profile.name = "Athlete";
+      advanceToDataEntry();
+    }
+
+    function advanceToDataEntry() {
+      document.getElementById('gate-login').classList.add('hidden');
+      document.getElementById('gate-dataentry').classList.remove('hidden');
+    }
+
+    function completeOnboarding() {
+      const w = parseFloat(document.getElementById('init-weight').value) || 75.0;
+      const c = parseInt(document.getElementById('init-cal').value) || 2200;
+      const p = parseInt(document.getElementById('init-pro').value) || 160;
+      const wat = parseFloat(document.getElementById('init-wat').value) || 3.5;
+
+      state.targets.cal = c;
+      state.targets.pro = p;
+      state.targets.wat = wat;
+      state.weightHistory = [{ date: 'Today', weight: w }];
+      state.onboardingComplete = true;
+
+      saveState();
+
+      // Hide onboarding gate and load main UI
+      document.getElementById('gate-dataentry').classList.add('hidden');
+      renderRings();
+      renderSplitSelector();
+      renderWorkoutSplit();
+      updateAnalyticsUI();
+      triggerHaptic([40, 80]);
+    }
+
+    // Split Selector Tabs
+    function renderSplitSelector() {
+      const track = document.getElementById('split-chips-track');
+      track.innerHTML = '';
+      Object.keys(state.routines).forEach(key => {
+        const chip = document.createElement('div');
+        chip.className = `split-pill-chip ${key === state.activeSplit ? 'active' : ''}`;
+        chip.innerText = state.routines[key].title.split('—')[0].trim();
+        chip.onclick = () => {
+          state.activeSplit = key;
+          renderSplitSelector();
+          renderWorkoutSplit();
+        };
+        track.appendChild(chip);
+      });
+    }
+
+    function renderWorkoutSplit() {
+      const current = state.routines[state.activeSplit];
+      if (!current) return;
+      document.getElementById('active-split-heading').innerText = current.title;
+
+      let html = '';
+      current.exercises.forEach(ex => {
+        html += `
+          <div class="list-row" onclick="openExerciseSheet('${ex.name}', ${ex.sets}, '${ex.reps}', ${ex.rest})">
+            <div class="row-left">
+              <div class="row-icon-pill" style="background:var(--exercise-green);">
+                <svg viewBox="0 0 24 24"><path d="M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14l1.43 1.43L2 7.71l1.43 1.43L2 10.57 3.43 12 7 8.43 15.57 17 12 20.57 13.43 22l1.43-1.43 1.43 1.43 2.14-2.14 1.43 1.43 1.43-1.43-1.43-1.43L22 16.29z"/></svg>
+              </div>
+              <div>
+                <div class="row-title">${ex.name}</div>
+                <div class="row-sub">${ex.sets} sets × ${ex.reps} reps</div>
+              </div>
+            </div>
+            <div class="row-right" onclick="event.stopPropagation(); triggerRest(${ex.rest})">
+              <span>${ex.rest}s</span>
+              <svg class="chevron" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+            </div>
+          </div>
+        `;
+      });
+      document.getElementById('workout-exercise-feed').innerHTML = html;
+    }
+
+    // Modal Operations for Custom Splits and Exercises
+    function openCreateSplitModal() {
+      document.getElementById('modal-create-split').classList.add('open');
+    }
+    function closeCreateSplitModal() {
+      document.getElementById('modal-create-split').classList.remove('open');
+    }
+    function submitNewSplit() {
+      const name = document.getElementById('custom-split-name').value.trim();
+      if (!name) return;
+      const key = 'custom_' + Date.now();
+      state.routines[key] = {
+        title: name,
+        exercises: []
+      };
+      state.activeSplit = key;
+      saveState();
+      renderSplitSelector();
+      renderWorkoutSplit();
+      closeCreateSplitModal();
+      document.getElementById('custom-split-name').value = '';
+    }
+
+    function openAddExerciseModal() {
+      document.getElementById('modal-add-exercise').classList.add('open');
+    }
+    function closeAddExerciseModal() {
+      document.getElementById('modal-add-exercise').classList.remove('open');
+    }
+    function submitNewExercise() {
+      const name = document.getElementById('custom-ex-name').value.trim();
+      const sets = parseInt(document.getElementById('custom-ex-sets').value) || 3;
+      const reps = document.getElementById('custom-ex-reps').value.trim() || "8-10";
+      const rest = parseInt(document.getElementById('custom-ex-rest').value) || 90;
+
+      if (!name) return;
+      state.routines[state.activeSplit].exercises.push({ name, sets, reps, rest });
+      saveState();
+      renderWorkoutSplit();
+      closeAddExerciseModal();
+      document.getElementById('custom-ex-name').value = '';
+    }
+
+    // Tab Switcher
     function switchTab(viewId, tabBtn) {
       document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
@@ -855,9 +1244,7 @@
 
       if (viewId === 'analytics') {
         updateAnalyticsUI();
-        requestAnimationFrame(() => {
-          setTimeout(drawWeightChart, 100);
-        });
+        requestAnimationFrame(() => setTimeout(drawWeightChart, 100));
       }
     }
 
@@ -912,42 +1299,7 @@
       alert("Nutrition targets updated.");
     }
 
-    // Workouts Controller
-    const splitSequence = ['pushA', 'pullA', 'legsA'];
-    function cycleSplit() {
-      const idx = (splitSequence.indexOf(state.activeSplit) + 1) % splitSequence.length;
-      state.activeSplit = splitSequence[idx];
-      renderWorkoutSplit();
-    }
-
-    function renderWorkoutSplit() {
-      const current = workoutDatabase[state.activeSplit];
-      document.getElementById('active-split-heading').innerText = current.title;
-
-      let html = '';
-      current.exercises.forEach(ex => {
-        html += `
-          <div class="list-row" onclick="openExerciseSheet('${ex.name}', ${ex.sets}, '${ex.reps}', ${ex.rest})">
-            <div class="row-left">
-              <div class="row-icon-pill" style="background:var(--exercise-green);">
-                <svg viewBox="0 0 24 24"><path d="M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14l1.43 1.43L2 7.71l1.43 1.43L2 10.57 3.43 12 7 8.43 15.57 17 12 20.57 13.43 22l1.43-1.43 1.43 1.43 2.14-2.14 1.43 1.43 1.43-1.43-1.43-1.43L22 16.29z"/></svg>
-              </div>
-              <div>
-                <div class="row-title">${ex.name}</div>
-                <div class="row-sub">${ex.sets} sets × ${ex.reps} reps</div>
-              </div>
-            </div>
-            <div class="row-right" onclick="event.stopPropagation(); triggerRest(${ex.rest})">
-              <span>${ex.rest}s</span>
-              <svg class="chevron" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
-            </div>
-          </div>
-        `;
-      });
-      document.getElementById('workout-exercise-feed').innerHTML = html;
-    }
-
-    // Set Logging Half-Sheet with Set Types, Ghost Data, and Auto-Rest
+    // Set Logger with Ghost Data, 1RM, Plate Math & Auto-Rest
     let currentExercise = "";
     let activeRestInterval = 90;
 
@@ -994,7 +1346,7 @@
       let max1RM = 0;
       let topWeight = 0;
 
-      document.querySelectorAll('.set-table-row').forEach(row => {
+      document.querySelectorAll('#sheet-sets-container .set-table-row').forEach(row => {
         const isWarmup = row.querySelector('.set-tag-badge').innerText === 'W';
         const w = parseFloat(row.querySelector('.set-weight-val').value) || 0;
         const r = parseFloat(row.querySelector('.set-reps-val').value) || 0;
@@ -1058,7 +1410,6 @@
           state.exerciseHistory[currentExercise][index] = { weight: w, reps: r };
           if (!isWarmup) state.totalTonnage += (w * r);
 
-          // Track 1RM Records
           if (!isWarmup && w > 0 && r > 0) {
             const current1RM = Math.round(w * (1 + (r / 30)));
             const best = state.exerciseBest1RM[currentExercise] || 0;
@@ -1070,7 +1421,6 @@
           saveState();
           updateAnalyticsUI();
         }
-        // Auto-Trigger Dynamic Rest Timer on completed set
         triggerRest(activeRestInterval);
       }
       calcSheetMetrics();
@@ -1080,7 +1430,7 @@
       document.getElementById('sheet-modal').classList.remove('open');
     }
 
-    // Dynamic Island Rest Interval Pill Engine
+    // Rest Pill Timer Engine
     let pillTimer = null;
     let pillSeconds = 0;
     let pillPaused = false;
@@ -1124,7 +1474,6 @@
       document.getElementById('dynamic-island-pill').classList.remove('show');
     }
 
-    // Web Audio Synthesizer Alert
     function playAudioPing() {
       try {
         const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -1145,7 +1494,7 @@
       if (navigator.vibrate) navigator.vibrate(pattern);
     }
 
-    // Analytics Engine
+    // Analytics Engine & Sparkline
     function logBodyweight() {
       const input = document.getElementById('in-bodyweight');
       const val = parseFloat(input.value);
@@ -1171,7 +1520,6 @@
         const lastEntries = state.weightHistory.slice(-7);
         const sum = lastEntries.reduce((acc, curr) => acc + curr.weight, 0);
         const avg = sum / lastEntries.length;
-        // Adaptive TDEE: approx 33 kcal per kg for active hypertrophy training
         const tdee = Math.round(avg * 33);
         document.getElementById('analytics-tdee').innerText = tdee.toLocaleString();
       } else {
@@ -1179,7 +1527,6 @@
       }
     }
 
-    // High-DPI Crisp Canvas Sparkline
     function drawWeightChart() {
       const canvas = document.getElementById('weight-chart');
       if (!canvas) return;
@@ -1225,7 +1572,6 @@
       const graphW = width - padX * 2;
       const graphH = height - padY * 2;
 
-      // Draw Gradient Fill Under Curve
       const linePoints = data.map((pt, i) => {
         const x = padX + (i / (data.length - 1)) * graphW;
         const y = height - padY - ((pt.weight - min) / (max - min)) * graphH;
@@ -1247,7 +1593,6 @@
       ctx.fillStyle = grad;
       ctx.fill();
 
-      // Stroke Trendline
       ctx.beginPath();
       ctx.strokeStyle = "#A1FF00";
       ctx.lineWidth = 2.5;
@@ -1260,7 +1605,6 @@
       });
       ctx.stroke();
 
-      // Data Circles & Numeric Labels
       linePoints.forEach((pt) => {
         ctx.fillStyle = "#1C1C1E";
         ctx.beginPath();
@@ -1272,7 +1616,6 @@
         ctx.arc(pt.x, pt.y, 3, 0, Math.PI * 2);
         ctx.fill();
 
-        // Print kg label on top
         ctx.fillStyle = "#8E8E93";
         ctx.font = "600 10px -apple-system, sans-serif";
         ctx.textAlign = "center";
@@ -1280,50 +1623,31 @@
       });
     }
 
-    // Auto-redraw on orientation change or screen resize
     window.addEventListener('resize', () => {
       if (document.getElementById('view-analytics').classList.contains('active')) {
         drawWeightChart();
       }
     });
 
-    // Google Sign-In Decoupled Callback
-    function handleGoogleCredential(response) {
-      try {
-        const base64Url = response.credential.split('.')[1];
-        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
-        const user = JSON.parse(jsonPayload);
-
-        state.profile.name = user.given_name || user.name;
-        state.profile.email = user.email;
-        state.profile.picture = user.picture;
-
-        syncProfileUI();
-        saveState();
-        triggerHaptic([40, 40]);
-      } catch(e) {}
-    }
-
+    // Profile & Persistence
     function syncProfileUI() {
       if (state.profile.picture) {
         document.getElementById('avatar-container').innerHTML = `<img src="${state.profile.picture}" alt="Avatar">`;
       }
       if (state.profile.email) {
-        document.getElementById('profile-card').style.display = 'block';
-        document.getElementById('linked-email').innerText = `Linked: ${state.profile.email}`;
+        document.getElementById('profile-status-desc').innerText = `Linked: ${state.profile.email}`;
       }
     }
 
-    // Persistence & Vault
     function saveState() {
-      localStorage.setItem('apple_health_recomp_v3', JSON.stringify(state));
+      localStorage.setItem('apple_health_recomp_v4', JSON.stringify(state));
     }
 
     function loadState() {
-      const raw = localStorage.getItem('apple_health_recomp_v3');
+      const raw = localStorage.getItem('apple_health_recomp_v4');
       if (raw) {
         state = JSON.parse(raw);
+        if (!state.routines) state.routines = defaultRoutines;
         syncProfileUI();
       }
     }
@@ -1339,8 +1663,8 @@
     }
 
     function clearData() {
-      if (confirm("Reset all health metrics and workout volume?")) {
-        localStorage.removeItem('apple_health_recomp_v3');
+      if (confirm("Reset all health metrics and workout routines?")) {
+        localStorage.removeItem('apple_health_recomp_v4');
         location.reload();
       }
     }
