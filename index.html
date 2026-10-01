@@ -14,17 +14,20 @@
 
   <style>
     :root {
+      /* Apple HIG Dark Palette */
       --bg: #000000;
       --surface-1: #1C1C1E;
       --surface-2: #2C2C2E;
       --surface-3: #3A3A3C;
       --separator: rgba(84, 84, 88, 0.45);
 
+      /* Semantic Activity Spectrum */
       --move-red: #FA114F;
       --exercise-green: #A1FF00;
       --stand-cyan: #00F0FF;
       --macro-amber: #FF9F0A;
 
+      /* Typography Labels */
       --label-primary: #FFFFFF;
       --label-secondary: #8E8E93;
       --label-tertiary: #48484A;
@@ -441,7 +444,7 @@
       color: #000;
     }
 
-    /* Tab Bar */
+    /* Native Tab Bar */
     .apple-tabbar {
       position: fixed;
       bottom: 0;
@@ -634,7 +637,9 @@
         <div>
           <h2 class="section-title" style="margin-top:0;">Bodyweight Trend</h2>
           <div class="inset-list" style="padding:16px;">
-            <canvas id="weight-chart" width="400" height="150" style="width:100%;height:150px;"></canvas>
+            <div style="position:relative;width:100%;height:160px;">
+              <canvas id="weight-chart" style="width:100%;height:100%;display:block;"></canvas>
+            </div>
             <div style="display:flex;gap:10px;margin-top:14px;">
               <input type="number" step="0.1" id="in-bodyweight" class="apple-input" style="flex:1;" placeholder="Weigh-in (kg)">
               <button class="apple-btn" style="width:auto;padding:12px 20px;" onclick="logBodyweight()">Log</button>
@@ -815,10 +820,10 @@
       targets: { cal: 2200, pro: 160, wat: 3.5 },
       logs: { cal: 0, pro: 0, wat: 0.0 },
       weightHistory: [
-        { date: '2026-09-26', weight: 75.8 },
-        { date: '2026-09-28', weight: 75.5 },
-        { date: '2026-09-30', weight: 75.2 },
-        { date: '2026-10-02', weight: 75.0 }
+        { date: 'Sep 26', weight: 75.8 },
+        { date: 'Sep 28', weight: 75.5 },
+        { date: 'Sep 30', weight: 75.2 },
+        { date: 'Oct 2', weight: 75.0 }
       ],
       exerciseHistory: {},
       exerciseBest1RM: {},
@@ -836,10 +841,9 @@
       renderRings();
       renderWorkoutSplit();
       updateAnalyticsUI();
-      drawWeightChart();
     });
 
-    // Native Tab Switcher
+    // Native Tab Switcher with Canvas Redraw Trigger
     function switchTab(viewId, tabBtn) {
       document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
@@ -848,7 +852,13 @@
 
       const titleMap = { summary: 'Summary', workouts: 'Workouts', analytics: 'Analytics', settings: 'Vault' };
       document.getElementById('page-title').innerText = titleMap[viewId];
-      if (viewId === 'analytics') setTimeout(drawWeightChart, 50);
+
+      if (viewId === 'analytics') {
+        updateAnalyticsUI();
+        requestAnimationFrame(() => {
+          setTimeout(drawWeightChart, 100);
+        });
+      }
     }
 
     // Rings Render Engine
@@ -1135,76 +1145,147 @@
       if (navigator.vibrate) navigator.vibrate(pattern);
     }
 
-    // Analytics & Canvas Sparkline Engine
+    // Analytics Engine
     function logBodyweight() {
-      const val = parseFloat(document.getElementById('in-bodyweight').value);
-      if (!isNaN(val) && val > 0) {
-        state.weightHistory.push({ date: new Date().toISOString().slice(0,10), weight: val });
-        document.getElementById('in-bodyweight').value = '';
+      const input = document.getElementById('in-bodyweight');
+      const val = parseFloat(input.value);
+      if (!isNaN(val) && val > 20 && val < 300) {
+        state.weightHistory.push({
+          date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+          weight: Math.round(val * 10) / 10
+        });
+        input.value = '';
         saveState();
         updateAnalyticsUI();
         drawWeightChart();
         triggerHaptic([40]);
+      } else {
+        alert("Please enter a valid weight (e.g. 74.5)");
       }
     }
 
     function updateAnalyticsUI() {
-      document.getElementById('analytics-total-tonnage').innerText = state.totalTonnage.toLocaleString();
-      if (state.weightHistory.length) {
-        const last = state.weightHistory.slice(-7);
-        const avg = (last.reduce((a, b) => a + b.weight, 0) / last.length).toFixed(1);
-        // TDEE estimated formula based on average bodyweight
-        document.getElementById('analytics-tdee').innerText = Math.round(avg * 32).toLocaleString();
+      document.getElementById('analytics-total-tonnage').innerText = (state.totalTonnage || 0).toLocaleString();
+
+      if (state.weightHistory && state.weightHistory.length > 0) {
+        const lastEntries = state.weightHistory.slice(-7);
+        const sum = lastEntries.reduce((acc, curr) => acc + curr.weight, 0);
+        const avg = sum / lastEntries.length;
+        // Adaptive TDEE: approx 33 kcal per kg for active hypertrophy training
+        const tdee = Math.round(avg * 33);
+        document.getElementById('analytics-tdee').innerText = tdee.toLocaleString();
+      } else {
+        document.getElementById('analytics-tdee').innerText = "--";
       }
     }
 
+    // High-DPI Crisp Canvas Sparkline
     function drawWeightChart() {
       const canvas = document.getElementById('weight-chart');
       if (!canvas) return;
+
+      const container = canvas.parentElement;
+      const rect = container.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return;
+
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+
       const ctx = canvas.getContext('2d');
+      ctx.resetTransform?.();
+      ctx.scale(dpr, dpr);
+
+      const width = rect.width;
+      const height = rect.height;
       const data = state.weightHistory.slice(-7);
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      ctx.clearRect(0, 0, width, height);
 
       if (data.length < 2) {
         ctx.fillStyle = "#8E8E93";
-        ctx.font = "12px -apple-system";
+        ctx.font = "600 13px -apple-system, sans-serif";
         ctx.textAlign = "center";
-        ctx.fillText("Log 2+ entries to display trendline", canvas.width / 2, canvas.height / 2);
+        ctx.fillText("Log 2+ entries to display trendline", width / 2, height / 2);
         return;
       }
 
       const weights = data.map(d => d.weight);
-      const min = Math.min(...weights) - 0.5;
-      const max = Math.max(...weights) + 0.5;
-      const pad = 20;
+      let min = Math.min(...weights);
+      let max = Math.max(...weights);
+      if (min === max) { min -= 1; max += 1; }
+      else {
+        const range = max - min;
+        min -= range * 0.15;
+        max += range * 0.15;
+      }
+
+      const padX = 24;
+      const padY = 24;
+      const graphW = width - padX * 2;
+      const graphH = height - padY * 2;
+
+      // Draw Gradient Fill Under Curve
+      const linePoints = data.map((pt, i) => {
+        const x = padX + (i / (data.length - 1)) * graphW;
+        const y = height - padY - ((pt.weight - min) / (max - min)) * graphH;
+        return { x, y, weight: pt.weight, date: pt.date };
+      });
+
+      const grad = ctx.createLinearGradient(0, padY, 0, height - padY);
+      grad.addColorStop(0, "rgba(161, 255, 0, 0.25)");
+      grad.addColorStop(1, "rgba(161, 255, 0, 0.0)");
 
       ctx.beginPath();
-      ctx.strokeStyle = "#A1FF00";
-      ctx.lineWidth = 3;
-      ctx.lineJoin = "round";
+      ctx.moveTo(linePoints[0].x, height - padY);
+      linePoints.forEach((pt, i) => {
+        if (i === 0) ctx.lineTo(pt.x, pt.y);
+        else ctx.lineTo(pt.x, pt.y);
+      });
+      ctx.lineTo(linePoints[linePoints.length - 1].x, height - padY);
+      ctx.closePath();
+      ctx.fillStyle = grad;
+      ctx.fill();
 
-      data.forEach((pt, i) => {
-        const x = pad + (i / (data.length - 1)) * (canvas.width - pad * 2);
-        const y = canvas.height - pad - ((pt.weight - min) / (max - min)) * (canvas.height - pad * 2);
-        if (i === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
+      // Stroke Trendline
+      ctx.beginPath();
+      ctx.strokeStyle = "#A1FF00";
+      ctx.lineWidth = 2.5;
+      ctx.lineJoin = "round";
+      ctx.lineCap = "round";
+
+      linePoints.forEach((pt, i) => {
+        if (i === 0) ctx.moveTo(pt.x, pt.y);
+        else ctx.lineTo(pt.x, pt.y);
       });
       ctx.stroke();
 
-      // Render Data Points
-      data.forEach((pt, i) => {
-        const x = pad + (i / (data.length - 1)) * (canvas.width - pad * 2);
-        const y = canvas.height - pad - ((pt.weight - min) / (max - min)) * (canvas.height - pad * 2);
-        ctx.fillStyle = "#000";
+      // Data Circles & Numeric Labels
+      linePoints.forEach((pt) => {
+        ctx.fillStyle = "#1C1C1E";
         ctx.beginPath();
-        ctx.arc(x, y, 5, 0, Math.PI * 2);
+        ctx.arc(pt.x, pt.y, 5, 0, Math.PI * 2);
         ctx.fill();
+
         ctx.fillStyle = "#A1FF00";
         ctx.beginPath();
-        ctx.arc(x, y, 3, 0, Math.PI * 2);
+        ctx.arc(pt.x, pt.y, 3, 0, Math.PI * 2);
         ctx.fill();
+
+        // Print kg label on top
+        ctx.fillStyle = "#8E8E93";
+        ctx.font = "600 10px -apple-system, sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText(`${pt.weight}`, pt.x, pt.y - 8);
       });
     }
+
+    // Auto-redraw on orientation change or screen resize
+    window.addEventListener('resize', () => {
+      if (document.getElementById('view-analytics').classList.contains('active')) {
+        drawWeightChart();
+      }
+    });
 
     // Google Sign-In Decoupled Callback
     function handleGoogleCredential(response) {
