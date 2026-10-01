@@ -14,20 +14,17 @@
 
   <style>
     :root {
-      /* Apple HIG Dark Palette */
       --bg: #000000;
       --surface-1: #1C1C1E;
       --surface-2: #2C2C2E;
       --surface-3: #3A3A3C;
       --separator: rgba(84, 84, 88, 0.45);
 
-      /* Semantic Activity Spectrum */
       --move-red: #FA114F;
       --exercise-green: #A1FF00;
       --stand-cyan: #00F0FF;
       --macro-amber: #FF9F0A;
 
-      /* Typography Labels */
       --label-primary: #FFFFFF;
       --label-secondary: #8E8E93;
       --label-tertiary: #48484A;
@@ -58,12 +55,12 @@
     }
 
     .app-viewport {
-      max-width: 680px;
+      max-width: 840px;
       margin: 0 auto;
       padding: 0 16px;
     }
 
-    /* Universal Dynamic Island Floating Pill */
+    /* Universal Floating Dynamic Island */
     #dynamic-island-pill {
       position: fixed;
       top: calc(var(--safe-top) + 6px);
@@ -105,7 +102,7 @@
       cursor: pointer;
     }
 
-    /* Apple Nav Header */
+    /* Navigation Header */
     .nav-header {
       display: flex;
       justify-content: space-between;
@@ -144,7 +141,7 @@
     .avatar-btn img { width: 100%; height: 100%; object-fit: cover; }
     .avatar-btn svg { width: 22px; height: 22px; fill: var(--label-secondary); }
 
-    /* Concentric Activity Rings Hero Card */
+    /* Hero Rings Card */
     .rings-card {
       background: var(--surface-1);
       border-radius: 20px;
@@ -201,12 +198,24 @@
     .legend-val { font-size: 15px; font-weight: 700; }
     .legend-val span { font-size: 12px; color: var(--label-secondary); font-weight: 500; }
 
-    /* Highlights Section */
+    /* Responsive Section Layout */
     .section-title {
       font-size: 20px;
       font-weight: 700;
       letter-spacing: -0.4px;
       margin: 24px 4px 12px;
+    }
+
+    .studio-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    @media (min-width: 768px) {
+      .studio-grid {
+        grid-template-columns: 1fr 1fr;
+      }
     }
 
     .metric-grid {
@@ -352,6 +361,8 @@
       padding: 10px 20px calc(var(--safe-bottom) + 24px);
       transform: translateY(100%);
       transition: transform 0.3s var(--spring);
+      max-height: 85vh;
+      overflow-y: auto;
     }
 
     #sheet-modal.open .sheet-body { transform: translateY(0); }
@@ -368,7 +379,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
 
     .sheet-nav h3 { font-size: 18px; font-weight: 700; }
@@ -381,12 +392,33 @@
       cursor: pointer;
     }
 
+    /* Set Table Layout with Set Tags */
     .set-table-row {
       display: grid;
       grid-template-columns: 36px 1fr 1fr 40px;
       gap: 10px;
       align-items: center;
       margin-bottom: 10px;
+    }
+
+    .set-tag-badge {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--surface-2);
+      color: var(--label-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .set-tag-badge.warmup {
+      background: rgba(0, 240, 255, 0.2);
+      color: var(--stand-cyan);
     }
 
     .check-circle {
@@ -409,7 +441,7 @@
       color: #000;
     }
 
-    /* Native Tab Bar */
+    /* Tab Bar */
     .apple-tabbar {
       position: fixed;
       bottom: 0;
@@ -465,7 +497,7 @@
     <!-- Top Large Navigation Header -->
     <header class="nav-header">
       <div>
-        <div class="date-caption" id="apple-date-caption">FRIDAY, OCT 2</div>
+        <div class="date-caption" id="apple-date-caption">TODAY</div>
         <div class="large-title" id="page-title">Summary</div>
       </div>
       <div class="avatar-btn" onclick="switchTab('settings', document.querySelectorAll('.tab-item')[3])" id="avatar-container">
@@ -473,7 +505,7 @@
       </div>
     </header>
 
-    <!-- TAB 1: TODAY (SUMMARY) -->
+    <!-- TAB 1: SUMMARY (TODAY) -->
     <section id="view-summary" class="page-view active">
       <div class="rings-card">
         <div class="rings-svg-wrap">
@@ -515,66 +547,72 @@
         </div>
       </div>
 
-      <h2 class="section-title">Highlights</h2>
-      <div class="metric-grid">
-        <div class="metric-card" onclick="quickMealLog('Lunch', 650, 45)">
-          <div class="metric-top">
-            <div class="metric-icon-badge" style="background:var(--move-red);">
-              <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z"/></svg>
+      <div class="studio-grid">
+        <div>
+          <h2 class="section-title">Highlights</h2>
+          <div class="metric-grid">
+            <div class="metric-card" onclick="quickMealLog('Lunch', 650, 45)">
+              <div class="metric-top">
+                <div class="metric-icon-badge" style="background:var(--move-red);">
+                  <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z"/></svg>
+                </div>
+                <div class="metric-category" style="color:var(--move-red);">Energy Intake</div>
+              </div>
+              <div>
+                <span class="metric-num" id="card-cal-val">0</span>
+                <span class="metric-unit">KCAL</span>
+              </div>
             </div>
-            <div class="metric-category" style="color:var(--move-red);">Energy Intake</div>
-          </div>
-          <div>
-            <span class="metric-num" id="card-cal-val">0</span>
-            <span class="metric-unit">KCAL</span>
+
+            <div class="metric-card" onclick="quickMealLog('Shake', 300, 35)">
+              <div class="metric-top">
+                <div class="metric-icon-badge" style="background:var(--exercise-green);">
+                  <svg viewBox="0 0 24 24"><path d="M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14l1.43 1.43L2 7.71l1.43 1.43L2 10.57 3.43 12 7 8.43 15.57 17 12 20.57 13.43 22l1.43-1.43 1.43 1.43 2.14-2.14 1.43 1.43 1.43-1.43-1.43-1.43L22 16.29z"/></svg>
+                </div>
+                <div class="metric-category" style="color:var(--exercise-green);">Protein Influx</div>
+              </div>
+              <div>
+                <span class="metric-num" id="card-pro-val">0</span>
+                <span class="metric-unit">G</span>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div class="metric-card" onclick="quickMealLog('Shake', 300, 35)">
-          <div class="metric-top">
-            <div class="metric-icon-badge" style="background:var(--exercise-green);">
-              <svg viewBox="0 0 24 24"><path d="M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14l1.43 1.43L2 7.71l1.43 1.43L2 10.57 3.43 12 7 8.43 15.57 17 12 20.57 13.43 22l1.43-1.43 1.43 1.43 2.14-2.14 1.43 1.43 1.43-1.43-1.43-1.43L22 16.29z"/></svg>
+        <div>
+          <h2 class="section-title">Hydration Intake</h2>
+          <div class="inset-list">
+            <div class="list-row" onclick="addWater(0.25)">
+              <div class="row-left">
+                <div class="row-icon-pill" style="background:var(--stand-cyan);">
+                  <svg viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+                </div>
+                <div>
+                  <div class="row-title">Glass of Water</div>
+                  <div class="row-sub">+250 ml logged to daily ring</div>
+                </div>
+              </div>
+              <div class="row-right">
+                <span>+0.25L</span>
+                <svg class="chevron" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+              </div>
             </div>
-            <div class="metric-category" style="color:var(--exercise-green);">Protein Influx</div>
-          </div>
-          <div>
-            <span class="metric-num" id="card-pro-val">0</span>
-            <span class="metric-unit">G</span>
-          </div>
-        </div>
-      </div>
 
-      <h2 class="section-title">Hydration Intake</h2>
-      <div class="inset-list">
-        <div class="list-row" onclick="addWater(0.25)">
-          <div class="row-left">
-            <div class="row-icon-pill" style="background:var(--stand-cyan);">
-              <svg viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+            <div class="list-row" onclick="addWater(0.50)">
+              <div class="row-left">
+                <div class="row-icon-pill" style="background:var(--stand-cyan);">
+                  <svg viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+                </div>
+                <div>
+                  <div class="row-title">Hydration Bottle</div>
+                  <div class="row-sub">+500 ml logged to daily ring</div>
+                </div>
+              </div>
+              <div class="row-right">
+                <span>+0.50L</span>
+                <svg class="chevron" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+              </div>
             </div>
-            <div>
-              <div class="row-title">Glass of Water</div>
-              <div class="row-sub">+250 ml logged to daily ring</div>
-            </div>
-          </div>
-          <div class="row-right">
-            <span>+0.25L</span>
-            <svg class="chevron" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
-          </div>
-        </div>
-
-        <div class="list-row" onclick="addWater(0.50)">
-          <div class="row-left">
-            <div class="row-icon-pill" style="background:var(--stand-cyan);">
-              <svg viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
-            </div>
-            <div>
-              <div class="row-title">Hydration Bottle</div>
-              <div class="row-sub">+500 ml logged to daily ring</div>
-            </div>
-          </div>
-          <div class="row-right">
-            <span>+0.50L</span>
-            <svg class="chevron" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
           </div>
         </div>
       </div>
@@ -590,96 +628,100 @@
       <div class="inset-list" id="workout-exercise-feed"></div>
     </section>
 
-    <!-- TAB 3: ANALYTICS & BODY METRICS -->
+    <!-- TAB 3: ANALYTICS & RECOMP TDEE -->
     <section id="view-analytics" class="page-view">
-      <h2 class="section-title" style="margin-top:0;">Body Metrics & Trends</h2>
-      <div class="inset-list">
-        <div class="list-row">
-          <div class="row-left">
-            <div class="row-title">Morning Bodyweight (kg)</div>
+      <div class="studio-grid">
+        <div>
+          <h2 class="section-title" style="margin-top:0;">Bodyweight Trend</h2>
+          <div class="inset-list" style="padding:16px;">
+            <canvas id="weight-chart" width="400" height="150" style="width:100%;height:150px;"></canvas>
+            <div style="display:flex;gap:10px;margin-top:14px;">
+              <input type="number" step="0.1" id="in-bodyweight" class="apple-input" style="flex:1;" placeholder="Weigh-in (kg)">
+              <button class="apple-btn" style="width:auto;padding:12px 20px;" onclick="logBodyweight()">Log</button>
+            </div>
           </div>
-          <input type="number" step="0.1" id="in-bodyweight" class="apple-input" style="width:110px;text-align:right;" placeholder="75.0">
         </div>
-        <div class="list-row" onclick="logBodyweight()">
-          <div class="row-left">
-            <div class="row-title" style="color:var(--exercise-green);">Log Weight Entry</div>
-          </div>
-          <svg class="chevron" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
-        </div>
-      </div>
 
-      <h2 class="section-title">Session Load & Tonnage</h2>
-      <div class="metric-grid">
-        <div class="metric-card">
-          <div class="metric-category" style="color:var(--exercise-green);">Cumulative Tonnage</div>
-          <div>
-            <span class="metric-num" id="analytics-total-tonnage">0</span>
-            <span class="metric-unit">KG</span>
+        <div>
+          <h2 class="section-title" style="margin-top:0;">Adaptive TDEE & Recomp</h2>
+          <div class="metric-grid">
+            <div class="metric-card">
+              <div class="metric-category" style="color:var(--macro-amber);">Estimated TDEE</div>
+              <div>
+                <span class="metric-num" id="analytics-tdee">2,450</span>
+                <span class="metric-unit">KCAL</span>
+              </div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-category" style="color:var(--exercise-green);">Total Tonnage</div>
+              <div>
+                <span class="metric-num" id="analytics-total-tonnage">0</span>
+                <span class="metric-unit">KG</span>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-category" style="color:var(--stand-cyan);">7-Day Weight Avg</div>
-          <div>
-            <span class="metric-num" id="analytics-weight-avg">--</span>
-            <span class="metric-unit">KG</span>
+
+          <div class="inset-list">
+            <div class="list-row">
+              <div class="row-left">
+                <div class="row-title">Recommended Deficit</div>
+                <div class="row-sub">Calculated for lean recomposition</div>
+              </div>
+              <div class="row-right" style="color:var(--move-red);font-weight:700;">-300 kcal</div>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- TAB 4: SETTINGS & VAULT -->
+    <!-- TAB 4: VAULT & SETTINGS -->
     <section id="view-settings" class="page-view">
-      <h2 class="section-title" style="margin-top:0;">Macro Strategy</h2>
-      <div class="inset-list">
-        <div class="list-row">
-          <div class="row-left">
-            <div class="row-title">Calorie Goal (kcal)</div>
+      <div class="studio-grid">
+        <div>
+          <h2 class="section-title" style="margin-top:0;">Macro Targets</h2>
+          <div class="inset-list">
+            <div class="list-row">
+              <div class="row-left"><div class="row-title">Calorie Goal (kcal)</div></div>
+              <input type="number" id="in-target-cal" class="apple-input" style="width:110px;text-align:right;">
+            </div>
+            <div class="list-row">
+              <div class="row-left"><div class="row-title">Protein Goal (g)</div></div>
+              <input type="number" id="in-target-pro" class="apple-input" style="width:110px;text-align:right;">
+            </div>
+            <div class="list-row">
+              <div class="row-left"><div class="row-title">Hydration Goal (L)</div></div>
+              <input type="number" step="0.25" id="in-target-wat" class="apple-input" style="width:110px;text-align:right;">
+            </div>
           </div>
-          <input type="number" id="in-target-cal" class="apple-input" style="width:110px;text-align:right;">
+          <button class="apple-btn" onclick="saveTargetSettings()" style="margin-bottom:24px;">Save Nutritional Goals</button>
         </div>
-        <div class="list-row">
-          <div class="row-left">
-            <div class="row-title">Protein Goal (g)</div>
+
+        <div>
+          <h2 class="section-title" style="margin-top:0;">Google Identity</h2>
+          <div class="inset-list" style="padding:16px;">
+            <div id="g_id_onload"
+                 data-client_id="298118306280-r938avqbhjc6ao2vs8g3not14jife504.apps.googleusercontent.com"
+                 data-context="signin"
+                 data-ux_mode="popup"
+                 data-callback="handleGoogleCredential"
+                 data-auto_prompt="false">
+            </div>
+            <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="filled_black" data-text="signin_with" data-size="large" data-logo_alignment="left"></div>
+            <div id="profile-card" style="display:none;margin-top:14px;font-size:14px;color:var(--exercise-green);font-weight:600;">
+              <span id="linked-email"></span>
+            </div>
           </div>
-          <input type="number" id="in-target-pro" class="apple-input" style="width:110px;text-align:right;">
-        </div>
-        <div class="list-row">
-          <div class="row-left">
-            <div class="row-title">Hydration Goal (L)</div>
+
+          <h2 class="section-title">Data Backup</h2>
+          <div class="inset-list">
+            <div class="list-row" onclick="exportDataJSON()">
+              <div class="row-left"><div class="row-title">Export Backup (.JSON)</div></div>
+              <svg class="chevron" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+            </div>
+            <div class="list-row" onclick="clearData()">
+              <div class="row-left"><div class="row-title" style="color:var(--move-red);">Reset Local Health Storage</div></div>
+            </div>
           </div>
-          <input type="number" step="0.25" id="in-target-wat" class="apple-input" style="width:110px;text-align:right;">
-        </div>
-      </div>
-
-      <button class="apple-btn" onclick="saveTargetSettings()" style="margin-bottom:24px;">
-        Update Nutritional Goals
-      </button>
-
-      <h2 class="section-title">Google Identity</h2>
-      <div class="inset-list" style="padding:16px;">
-        <!-- Official Google Sign-In Container with your Client ID -->
-        <div id="g_id_onload"
-             data-client_id="298118306280-r938avqbhjc6ao2vs8g3not14jife504.apps.googleusercontent.com"
-             data-context="signin"
-             data-ux_mode="popup"
-             data-callback="handleGoogleCredential"
-             data-auto_prompt="false">
-        </div>
-        <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="filled_black" data-text="signin_with" data-size="large" data-logo_alignment="left"></div>
-
-        <div id="profile-card" style="display:none;margin-top:14px;font-size:14px;color:var(--exercise-green);font-weight:600;">
-          <span id="linked-email"></span>
-        </div>
-      </div>
-
-      <h2 class="section-title">Data Vault & Reset</h2>
-      <div class="inset-list">
-        <div class="list-row" onclick="exportDataJSON()">
-          <div class="row-left"><div class="row-title">Export Backup (.JSON)</div></div>
-          <svg class="chevron" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
-        </div>
-        <div class="list-row" onclick="clearData()">
-          <div class="row-left"><div class="row-title" style="color:var(--move-red);">Reset Local Health Storage</div></div>
         </div>
       </div>
     </section>
@@ -695,17 +737,20 @@
         <button class="sheet-done-btn" onclick="closeSheet()">Done</button>
       </div>
 
-      <!-- Plate Math Breakdown -->
-      <div id="plate-math-display" style="font-size:12px;font-weight:600;color:var(--label-secondary);margin-bottom:8px;">
-        Plates per side (20kg bar): <span id="plate-spec" style="color:var(--exercise-green);">--</span>
+      <!-- Quick Metrics Summary Inside Sheet -->
+      <div style="display:flex;justify-content:space-between;margin-bottom:12px;font-size:12px;font-weight:700;">
+        <span style="color:var(--exercise-green);">VOLUME: <span id="sheet-vol">0</span> KG</span>
+        <span style="color:var(--macro-amber);">EST. 1RM: <span id="sheet-1rm">--</span> KG</span>
       </div>
 
-      <div style="font-size:13px;font-weight:700;color:var(--exercise-green);margin-bottom:14px;">
-        SESSION VOLUME: <span id="sheet-vol">0</span> KG
+      <!-- Plate Math Breakdown & Warmup Ladder -->
+      <div style="background:var(--surface-2);border-radius:12px;padding:10px 14px;margin-bottom:14px;font-size:11.5px;color:var(--label-secondary);">
+        <div>Plates / side (20kg bar): <span id="plate-spec" style="color:#FFF;font-weight:700;">--</span></div>
+        <div style="margin-top:4px;">Warmup Ladder: <span id="warmup-ladder" style="color:var(--stand-cyan);font-weight:600;">--</span></div>
       </div>
 
       <div style="display:grid;grid-template-columns:36px 1fr 1fr 40px;gap:10px;font-size:11px;font-weight:700;color:var(--label-secondary);text-transform:uppercase;margin-bottom:8px;">
-        <span>Set</span><span style="text-align:center;">Weight (kg)</span><span style="text-align:center;">Reps</span><span style="text-align:center;">Done</span>
+        <span>Type</span><span style="text-align:center;">Weight</span><span style="text-align:center;">Reps</span><span style="text-align:center;">Done</span>
       </div>
 
       <div id="sheet-sets-container"></div>
@@ -769,8 +814,14 @@
     let state = {
       targets: { cal: 2200, pro: 160, wat: 3.5 },
       logs: { cal: 0, pro: 0, wat: 0.0 },
-      weightHistory: [],
+      weightHistory: [
+        { date: '2026-09-26', weight: 75.8 },
+        { date: '2026-09-28', weight: 75.5 },
+        { date: '2026-09-30', weight: 75.2 },
+        { date: '2026-10-02', weight: 75.0 }
+      ],
       exerciseHistory: {},
+      exerciseBest1RM: {},
       totalTonnage: 0,
       activeSplit: 'pushA',
       profile: { name: "Mahesh", email: "", picture: "" }
@@ -785,9 +836,10 @@
       renderRings();
       renderWorkoutSplit();
       updateAnalyticsUI();
+      drawWeightChart();
     });
 
-    // Tab Switcher
+    // Native Tab Switcher
     function switchTab(viewId, tabBtn) {
       document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
@@ -796,9 +848,10 @@
 
       const titleMap = { summary: 'Summary', workouts: 'Workouts', analytics: 'Analytics', settings: 'Vault' };
       document.getElementById('page-title').innerText = titleMap[viewId];
+      if (viewId === 'analytics') setTimeout(drawWeightChart, 50);
     }
 
-    // Concentric Rings Update
+    // Rings Render Engine
     function renderRings() {
       document.getElementById('legend-move-text').innerHTML = `${state.logs.cal} <span id="legend-move-target">/ ${state.targets.cal.toLocaleString()} KCAL</span>`;
       document.getElementById('legend-pro-text').innerHTML = `${state.logs.pro}g <span id="legend-pro-target">/ ${state.targets.pro}G</span>`;
@@ -823,12 +876,14 @@
     function quickMealLog(type, cal, pro) {
       state.logs.cal += cal;
       state.logs.pro += pro;
+      triggerHaptic([30]);
       saveState();
       renderRings();
     }
 
     function addWater(liters) {
       state.logs.wat = Math.round((state.logs.wat + liters) * 100) / 100;
+      triggerHaptic([30]);
       saveState();
       renderRings();
     }
@@ -862,7 +917,7 @@
       let html = '';
       current.exercises.forEach(ex => {
         html += `
-          <div class="list-row" onclick="openExerciseSheet('${ex.name}', ${ex.sets}, '${ex.reps}')">
+          <div class="list-row" onclick="openExerciseSheet('${ex.name}', ${ex.sets}, '${ex.reps}', ${ex.rest})">
             <div class="row-left">
               <div class="row-icon-pill" style="background:var(--exercise-green);">
                 <svg viewBox="0 0 24 24"><path d="M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14l1.43 1.43L2 7.71l1.43 1.43L2 10.57 3.43 12 7 8.43 15.57 17 12 20.57 13.43 22l1.43-1.43 1.43 1.43 2.14-2.14 1.43 1.43 1.43-1.43-1.43-1.43L22 16.29z"/></svg>
@@ -882,13 +937,16 @@
       document.getElementById('workout-exercise-feed').innerHTML = html;
     }
 
-    // Exercise Logger with Plate Calculator & Ghost Memory
+    // Set Logging Half-Sheet with Set Types, Ghost Data, and Auto-Rest
     let currentExercise = "";
+    let activeRestInterval = 90;
 
-    function openExerciseSheet(name, sets, reps) {
+    function openExerciseSheet(name, sets, reps, rest) {
       currentExercise = name;
+      activeRestInterval = rest || 90;
       document.getElementById('sheet-exercise-title').innerText = name;
       document.getElementById('sheet-vol').innerText = "0";
+      document.getElementById('sheet-1rm').innerText = "--";
 
       const previous = state.exerciseHistory[name] || [];
       let html = '';
@@ -899,7 +957,7 @@
 
         html += `
           <div class="set-table-row">
-            <span style="font-weight:700;color:var(--label-secondary);">${i}</span>
+            <div class="set-tag-badge" onclick="cycleSetTag(this)">${i}</div>
             <input type="number" class="apple-input set-weight-val" placeholder="${wPlaceholder}" oninput="calcSheetMetrics(this)">
             <input type="number" class="apple-input set-reps-val" placeholder="${rPlaceholder}" oninput="calcSheetMetrics(this)">
             <div class="check-circle" onclick="toggleSetCheck(this, ${i - 1})">✓</div>
@@ -908,23 +966,47 @@
       }
       document.getElementById('sheet-sets-container').innerHTML = html;
       document.getElementById('plate-spec').innerText = "--";
+      document.getElementById('warmup-ladder').innerText = "--";
       document.getElementById('sheet-modal').classList.add('open');
+    }
+
+    function cycleSetTag(el) {
+      const order = ['1', 'W', 'D', 'F'];
+      let curr = el.innerText;
+      let next = order[(order.indexOf(curr) + 1) % order.length] || '1';
+      el.innerText = next;
+      el.classList.toggle('warmup', next === 'W');
+      calcSheetMetrics();
     }
 
     function calcSheetMetrics(inputEl) {
       let vol = 0;
+      let max1RM = 0;
+      let topWeight = 0;
+
       document.querySelectorAll('.set-table-row').forEach(row => {
+        const isWarmup = row.querySelector('.set-tag-badge').innerText === 'W';
         const w = parseFloat(row.querySelector('.set-weight-val').value) || 0;
         const r = parseFloat(row.querySelector('.set-reps-val').value) || 0;
+
+        if (w > topWeight) topWeight = w;
+
         if (row.querySelector('.check-circle').classList.contains('completed')) {
-          vol += (w * r);
+          if (!isWarmup) vol += (w * r);
+        }
+
+        if (w > 0 && r > 0 && !isWarmup) {
+          const est = Math.round(w * (1 + (r / 30)));
+          if (est > max1RM) max1RM = est;
         }
       });
-      document.getElementById('sheet-vol').innerText = vol.toLocaleString();
 
-      if (inputEl && inputEl.classList.contains('set-weight-val')) {
-        const target = parseFloat(inputEl.value) || 0;
-        calculateBarbellPlates(target);
+      document.getElementById('sheet-vol').innerText = vol.toLocaleString();
+      document.getElementById('sheet-1rm').innerText = max1RM ? max1RM : "--";
+
+      if (topWeight > 0) {
+        calculateBarbellPlates(topWeight);
+        generateWarmupLadder(topWeight);
       }
     }
 
@@ -945,18 +1027,41 @@
       document.getElementById('plate-spec').innerText = breakdown.length ? breakdown.join(', ') : "--";
     }
 
+    function generateWarmupLadder(workingWeight) {
+      const w50 = Math.round((workingWeight * 0.5) / 2.5) * 2.5;
+      const w70 = Math.round((workingWeight * 0.7) / 2.5) * 2.5;
+      const w90 = Math.round((workingWeight * 0.9) / 2.5) * 2.5;
+      document.getElementById('warmup-ladder').innerText = `Bar×10, ${w50}kg×8, ${w70}kg×4, ${w90}kg×1`;
+    }
+
     function toggleSetCheck(circleBtn, index) {
       circleBtn.classList.toggle('completed');
       const row = circleBtn.closest('.set-table-row');
+      const isWarmup = row.querySelector('.set-tag-badge').innerText === 'W';
       const w = parseFloat(row.querySelector('.set-weight-val').value) || 0;
       const r = parseInt(row.querySelector('.set-reps-val').value) || 0;
 
-      if (circleBtn.classList.contains('completed') && (w > 0 || r > 0)) {
-        if (!state.exerciseHistory[currentExercise]) state.exerciseHistory[currentExercise] = [];
-        state.exerciseHistory[currentExercise][index] = { weight: w, reps: r };
-        state.totalTonnage += (w * r);
-        saveState();
-        updateAnalyticsUI();
+      if (circleBtn.classList.contains('completed')) {
+        triggerHaptic([40, 60, 40]);
+        if (w > 0 || r > 0) {
+          if (!state.exerciseHistory[currentExercise]) state.exerciseHistory[currentExercise] = [];
+          state.exerciseHistory[currentExercise][index] = { weight: w, reps: r };
+          if (!isWarmup) state.totalTonnage += (w * r);
+
+          // Track 1RM Records
+          if (!isWarmup && w > 0 && r > 0) {
+            const current1RM = Math.round(w * (1 + (r / 30)));
+            const best = state.exerciseBest1RM[currentExercise] || 0;
+            if (current1RM > best) {
+              state.exerciseBest1RM[currentExercise] = current1RM;
+              triggerHaptic([100, 80, 100]);
+            }
+          }
+          saveState();
+          updateAnalyticsUI();
+        }
+        // Auto-Trigger Dynamic Rest Timer on completed set
+        triggerRest(activeRestInterval);
       }
       calcSheetMetrics();
     }
@@ -965,7 +1070,7 @@
       document.getElementById('sheet-modal').classList.remove('open');
     }
 
-    // Dynamic Island Rest Interval Pill
+    // Dynamic Island Rest Interval Pill Engine
     let pillTimer = null;
     let pillSeconds = 0;
     let pillPaused = false;
@@ -985,6 +1090,7 @@
           if (pillSeconds === 0) {
             clearInterval(pillTimer);
             playAudioPing();
+            triggerHaptic([150, 100, 150]);
             document.getElementById('dynamic-island-pill').classList.remove('show');
           }
         }
@@ -1008,6 +1114,7 @@
       document.getElementById('dynamic-island-pill').classList.remove('show');
     }
 
+    // Web Audio Synthesizer Alert
     function playAudioPing() {
       try {
         const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -1024,7 +1131,11 @@
       } catch(e) {}
     }
 
-    // Analytics Engine
+    function triggerHaptic(pattern) {
+      if (navigator.vibrate) navigator.vibrate(pattern);
+    }
+
+    // Analytics & Canvas Sparkline Engine
     function logBodyweight() {
       const val = parseFloat(document.getElementById('in-bodyweight').value);
       if (!isNaN(val) && val > 0) {
@@ -1032,17 +1143,67 @@
         document.getElementById('in-bodyweight').value = '';
         saveState();
         updateAnalyticsUI();
-        alert("Bodyweight logged.");
+        drawWeightChart();
+        triggerHaptic([40]);
       }
     }
 
     function updateAnalyticsUI() {
       document.getElementById('analytics-total-tonnage').innerText = state.totalTonnage.toLocaleString();
       if (state.weightHistory.length) {
-        const last7 = state.weightHistory.slice(-7);
-        const sum = last7.reduce((acc, curr) => acc + curr.weight, 0);
-        document.getElementById('analytics-weight-avg').innerText = (sum / last7.length).toFixed(1);
+        const last = state.weightHistory.slice(-7);
+        const avg = (last.reduce((a, b) => a + b.weight, 0) / last.length).toFixed(1);
+        // TDEE estimated formula based on average bodyweight
+        document.getElementById('analytics-tdee').innerText = Math.round(avg * 32).toLocaleString();
       }
+    }
+
+    function drawWeightChart() {
+      const canvas = document.getElementById('weight-chart');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const data = state.weightHistory.slice(-7);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      if (data.length < 2) {
+        ctx.fillStyle = "#8E8E93";
+        ctx.font = "12px -apple-system";
+        ctx.textAlign = "center";
+        ctx.fillText("Log 2+ entries to display trendline", canvas.width / 2, canvas.height / 2);
+        return;
+      }
+
+      const weights = data.map(d => d.weight);
+      const min = Math.min(...weights) - 0.5;
+      const max = Math.max(...weights) + 0.5;
+      const pad = 20;
+
+      ctx.beginPath();
+      ctx.strokeStyle = "#A1FF00";
+      ctx.lineWidth = 3;
+      ctx.lineJoin = "round";
+
+      data.forEach((pt, i) => {
+        const x = pad + (i / (data.length - 1)) * (canvas.width - pad * 2);
+        const y = canvas.height - pad - ((pt.weight - min) / (max - min)) * (canvas.height - pad * 2);
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+
+      // Render Data Points
+      data.forEach((pt, i) => {
+        const x = pad + (i / (data.length - 1)) * (canvas.width - pad * 2);
+        const y = canvas.height - pad - ((pt.weight - min) / (max - min)) * (canvas.height - pad * 2);
+        ctx.fillStyle = "#000";
+        ctx.beginPath();
+        ctx.arc(x, y, 5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#A1FF00";
+        ctx.beginPath();
+        ctx.arc(x, y, 3, 0, Math.PI * 2);
+        ctx.fill();
+      });
     }
 
     // Google Sign-In Decoupled Callback
@@ -1059,6 +1220,7 @@
 
         syncProfileUI();
         saveState();
+        triggerHaptic([40, 40]);
       } catch(e) {}
     }
 
@@ -1072,13 +1234,13 @@
       }
     }
 
-    // Persistence
+    // Persistence & Vault
     function saveState() {
-      localStorage.setItem('apple_health_recomp_v2', JSON.stringify(state));
+      localStorage.setItem('apple_health_recomp_v3', JSON.stringify(state));
     }
 
     function loadState() {
-      const raw = localStorage.getItem('apple_health_recomp_v2');
+      const raw = localStorage.getItem('apple_health_recomp_v3');
       if (raw) {
         state = JSON.parse(raw);
         syncProfileUI();
@@ -1097,7 +1259,7 @@
 
     function clearData() {
       if (confirm("Reset all health metrics and workout volume?")) {
-        localStorage.removeItem('apple_health_recomp_v2');
+        localStorage.removeItem('apple_health_recomp_v3');
         location.reload();
       }
     }
