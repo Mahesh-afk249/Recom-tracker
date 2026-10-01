@@ -5,36 +5,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Recomp" />
-  <meta name="theme-color" content="#090B10" />
+  <meta name="apple-mobile-web-app-title" content="Recomp Pro" />
+  <meta name="theme-color" content="#06080D" />
   <title>Recomp Pro Tracker</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg: #090B10;
-      --surface: #121620;
-      --surface-card: #181E2B;
-      --surface-elevated: #202739;
+      --bg: #06080D;
+      --surface: #0E121B;
+      --surface-card: #141A26;
+      --surface-elevated: #1B2333;
       --border: rgba(255, 255, 255, 0.08);
       --border-accent: rgba(16, 185, 129, 0.35);
-      
+
       --accent: #10B981;
-      --accent-glow: rgba(16, 185, 129, 0.25);
-      --accent-secondary: #06B6D4;
-      
-      --text: #F9FAFB;
+      --accent-glow: rgba(16, 185, 129, 0.3);
+      --accent-cyan: #06B6D4;
+      --accent-orange: #F59E0B;
+      --danger: #EF4444;
+
+      --text: #F8FAFC;
       --text-muted: #94A3B8;
       --text-sub: #64748B;
-      
-      --radius-sm: 10px;
-      --radius-md: 16px;
-      --radius-lg: 22px;
-      --radius-full: 9999px;
-      
+
       --safe-top: env(safe-area-inset-top, 20px);
       --safe-bottom: env(safe-area-inset-bottom, 20px);
     }
@@ -51,536 +48,658 @@
     body {
       background-color: var(--bg);
       color: var(--text);
-      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
       min-height: 100vh;
       overflow-x: hidden;
-      padding-top: calc(var(--safe-top) + 16px);
-      padding-bottom: calc(var(--safe-bottom) + 90px);
+      padding-top: calc(var(--safe-top) + 14px);
+      padding-bottom: calc(var(--safe-bottom) + 85px);
     }
 
     /* Splash Screen */
-    #splash-screen {
+    #splash {
       position: fixed;
       inset: 0;
-      background: radial-gradient(circle at center, #141A28 0%, #080A0E 100%);
-      z-index: 9999;
+      background: radial-gradient(circle at center, #151D2D 0%, #06080D 100%);
+      z-index: 10000;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s ease;
     }
 
-    #splash-screen.fade-out {
+    #splash.hidden {
       opacity: 0;
-      transform: scale(1.04);
+      transform: scale(1.05);
       pointer-events: none;
     }
 
-    .splash-logo {
-      width: 86px;
-      height: 86px;
-      border-radius: var(--radius-lg);
-      background: linear-gradient(135deg, #10B981, #06B6D4);
+    .splash-emblem {
+      width: 84px;
+      height: 84px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-cyan));
       display: flex;
       align-items: center;
       justify-content: center;
       box-shadow: 0 0 50px var(--accent-glow);
-      animation: pulseGlow 2s infinite alternate ease-in-out;
+      animation: pulse 1.8s infinite ease-in-out;
     }
 
-    .splash-logo svg {
-      width: 44px;
-      height: 44px;
-      fill: #090B10;
+    .splash-emblem svg { width: 44px; height: 44px; fill: #06080D; }
+    .splash-name { font-size: 24px; font-weight: 800; margin-top: 18px; letter-spacing: -0.5px; }
+    .splash-sub { font-size: 13px; color: var(--text-sub); margin-top: 4px; font-weight: 500; }
+
+    @keyframes pulse {
+      0% { transform: scale(0.96); box-shadow: 0 0 25px rgba(16,185,129,0.25); }
+      100% { transform: scale(1.03); box-shadow: 0 0 60px rgba(16,185,129,0.55); }
     }
 
-    .splash-title {
-      margin-top: 18px;
-      font-size: 24px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      background: linear-gradient(180deg, #FFFFFF 0%, #94A3B8 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .splash-tagline {
-      font-size: 13px;
-      color: var(--text-sub);
-      margin-top: 6px;
-      font-weight: 500;
-      letter-spacing: 0.2px;
-    }
-
-    @keyframes pulseGlow {
-      0% { transform: scale(0.96); box-shadow: 0 0 30px rgba(16, 185, 129, 0.2); }
-      100% { transform: scale(1.02); box-shadow: 0 0 60px rgba(16, 185, 129, 0.45); }
-    }
-
-    /* Layout Containers */
-    .app-container {
-      max-width: 480px;
-      margin: 0 auto;
-      padding: 0 20px;
-    }
+    /* Shell Layout */
+    .app-shell { max-width: 480px; margin: 0 auto; padding: 0 16px; }
 
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
 
-    .brand-group {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .brand-icon {
+    .brand-wrap { display: flex; align-items: center; gap: 12px; }
+    .brand-avatar {
       width: 40px;
       height: 40px;
       border-radius: 12px;
-      background: linear-gradient(135deg, #10B981, #06B6D4);
+      background: linear-gradient(135deg, var(--accent), var(--accent-cyan));
       display: flex;
       align-items: center;
       justify-content: center;
+      box-shadow: 0 4px 14px rgba(16,185,129,0.25);
     }
+    .brand-avatar svg { width: 22px; height: 22px; fill: #06080D; }
 
-    .brand-icon svg {
-      width: 22px;
-      height: 22px;
-      fill: #090B10;
-    }
+    .brand-text h1 { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
+    .brand-text p { font-size: 12px; color: var(--text-muted); font-weight: 500; }
 
-    .brand-title {
-      font-size: 20px;
-      font-weight: 800;
-      letter-spacing: -0.4px;
-    }
-
-    .brand-subtitle {
-      font-size: 12px;
-      color: var(--text-muted);
-      font-weight: 500;
-    }
-
-    .status-badge {
-      font-size: 12px;
-      font-weight: 600;
-      padding: 6px 12px;
-      border-radius: var(--radius-full);
+    .day-badge {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
       background: rgba(16, 185, 129, 0.12);
       color: var(--accent);
       border: 1px solid var(--border-accent);
+      padding: 6px 12px;
+      border-radius: 99px;
+      text-transform: uppercase;
     }
 
-    /* Metric Cards */
-    .kpi-grid {
+    /* Rings Grid */
+    .ring-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 10px;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
 
-    .kpi-card {
+    .metric-card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 14px 10px;
+      border-radius: 18px;
+      padding: 12px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       text-align: center;
+    }
+
+    .ring-box {
+      width: 60px;
+      height: 60px;
       position: relative;
-      overflow: hidden;
-      transition: transform 0.2s ease, border-color 0.2s ease;
+      margin-bottom: 8px;
     }
 
-    .kpi-card::after {
-      content: '';
+    .ring-box svg { transform: rotate(-90deg); width: 60px; height: 60px; }
+    .ring-bg { fill: none; stroke: rgba(255,255,255,0.06); stroke-width: 5; }
+    .ring-bar {
+      fill: none;
+      stroke-width: 5;
+      stroke-linecap: round;
+      stroke-dasharray: 157;
+      stroke-dashoffset: 157;
+      transition: stroke-dashoffset 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .ring-bar.cal { stroke: var(--accent-orange); }
+    .ring-bar.pro { stroke: var(--accent); }
+    .ring-bar.wat { stroke: var(--accent-cyan); }
+
+    .ring-val {
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, var(--accent), transparent);
-      opacity: 0.6;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11.5px;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
     }
 
-    .kpi-val {
-      font-size: 19px;
-      font-weight: 800;
-      letter-spacing: -0.3px;
-      color: #FFF;
-      margin-bottom: 2px;
-    }
+    .metric-lbl { font-size: 11px; font-weight: 600; color: var(--text-muted); }
+    .metric-sub { font-size: 9.5px; color: var(--text-sub); margin-top: 2px; }
 
-    .kpi-label {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-    }
-
-    /* Views & Sections */
-    .view-content {
-      display: none;
-      animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-
-    .view-content.active {
-      display: block;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Card Panels */
+    /* Panels & Inputs */
     .panel {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 20px;
-      margin-bottom: 18px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+      border-radius: 20px;
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
     }
 
-    .panel-header {
+    .panel-head {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 16px;
-    }
-
-    .panel-title {
-      font-size: 15px;
-      font-weight: 700;
-      letter-spacing: -0.2px;
-      color: var(--text);
-    }
-
-    /* Input Controls */
-    .input-field-group {
       margin-bottom: 14px;
     }
 
-    .input-label {
+    .panel-head h2 { font-size: 15px; font-weight: 700; letter-spacing: -0.2px; }
+
+    .field-group { margin-bottom: 14px; }
+    .field-label {
       display: block;
       font-size: 11px;
       font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.6px;
       color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
       margin-bottom: 6px;
     }
 
-    .input-box {
+    .data-input {
       width: 100%;
       background: var(--surface-card);
       border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
+      border-radius: 12px;
       padding: 13px 14px;
-      color: var(--text);
+      color: #FFF;
       font-size: 15px;
       font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
       outline: none;
-      transition: border-color 0.2s ease, background 0.2s ease;
-      -webkit-appearance: none;
+      transition: border-color 0.2s, background 0.2s;
     }
 
-    .input-box:focus {
+    .data-input:focus {
       border-color: var(--accent);
       background: var(--surface-elevated);
     }
 
-    /* Quick Presets */
-    .preset-group {
+    .preset-chips {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
+      gap: 6px;
       margin-top: 8px;
-      margin-bottom: 14px;
     }
 
-    .btn-preset {
+    .chip-btn {
       background: var(--surface-card);
       border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      color: var(--text-muted);
-      font-size: 12px;
-      font-weight: 600;
+      border-radius: 8px;
       padding: 8px 0;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
       cursor: pointer;
-      transition: all 0.15s ease;
+      transition: all 0.15s;
     }
 
-    .btn-preset:active {
+    .chip-btn:active {
       transform: scale(0.96);
       background: var(--accent);
-      color: #000;
+      color: #06080D;
       border-color: var(--accent);
     }
 
-    .primary-btn {
+    .btn-submit {
       width: 100%;
       background: linear-gradient(135deg, #10B981, #059669);
-      color: #051B11;
+      color: #04140D;
       border: none;
-      border-radius: var(--radius-md);
+      border-radius: 14px;
       padding: 15px;
-      font-size: 15px;
-      font-weight: 700;
+      font-size: 14px;
+      font-weight: 800;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      box-shadow: 0 6px 20px var(--accent-glow);
-      transition: transform 0.15s ease, opacity 0.15s ease;
+      box-shadow: 0 4px 18px var(--accent-glow);
+      transition: transform 0.15s, opacity 0.15s;
     }
 
-    .primary-btn:active {
-      transform: scale(0.98);
-      opacity: 0.9;
-    }
+    .btn-submit:active { transform: scale(0.98); opacity: 0.9; }
 
-    /* Split Filter Tabs */
-    .day-selector {
+    /* Split Filter Bar */
+    .split-carousel {
       display: flex;
       gap: 8px;
       overflow-x: auto;
-      padding-bottom: 8px;
-      margin-bottom: 16px;
+      padding-bottom: 6px;
+      margin-bottom: 14px;
       scrollbar-width: none;
     }
+    .split-carousel::-webkit-scrollbar { display: none; }
 
-    .day-selector::-webkit-scrollbar {
-      display: none;
-    }
-
-    .day-chip {
+    .split-chip {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: var(--radius-full);
-      padding: 9px 18px;
-      font-size: 13px;
-      font-weight: 600;
+      border-radius: 99px;
+      padding: 8px 16px;
+      font-size: 12px;
+      font-weight: 700;
       color: var(--text-muted);
       white-space: nowrap;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.2s;
     }
 
-    .day-chip.active {
+    .split-chip.active {
       background: var(--accent);
-      color: #061A12;
+      color: #06080D;
       border-color: var(--accent);
-      font-weight: 700;
     }
 
-    /* Workout List */
-    .exercise-card {
+    /* Exercise Rows */
+    .exercise-row {
       background: var(--surface-card);
       border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 14px 16px;
-      margin-bottom: 10px;
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 8px;
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      transition: background 0.15s ease;
+      align-items: center;
+      transition: all 0.15s;
+      cursor: pointer;
     }
 
-    .exercise-card:active {
+    .exercise-row:active {
       background: var(--surface-elevated);
+      transform: scale(0.99);
     }
 
-    .exercise-info h4 {
-      font-size: 14px;
-      font-weight: 700;
-      color: #FFF;
-      margin-bottom: 3px;
-    }
+    .ex-detail h3 { font-size: 14px; font-weight: 700; margin-bottom: 3px; }
+    .ex-detail p { font-size: 12px; color: var(--text-muted); }
 
-    .exercise-info p {
-      font-size: 12px;
-      color: var(--text-muted);
-      font-weight: 500;
-    }
-
-    .rest-tag {
+    .rest-pill {
       font-size: 11px;
       font-weight: 700;
       color: var(--accent);
-      background: rgba(16, 185, 129, 0.12);
-      border: 1px solid var(--border-accent);
-      padding: 5px 9px;
+      background: rgba(16,185,129,0.1);
+      border: 1px solid rgba(16,185,129,0.25);
       border-radius: 8px;
+      padding: 6px 10px;
       white-space: nowrap;
     }
 
-    /* Bottom Navigation Bar */
-    .dock-nav {
+    /* Rest Timer Modal */
+    #timer-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 10001;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.25s, visibility 0.25s;
+    }
+
+    #timer-modal.visible { opacity: 1; visibility: visible; }
+
+    .timer-dialog {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      width: 86%;
+      max-width: 320px;
+      padding: 24px 20px;
+      text-align: center;
+      transform: scale(0.92);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    #timer-modal.visible .timer-dialog { transform: scale(1); }
+
+    .timer-readout {
+      font-size: 48px;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 800;
+      color: var(--accent);
+      margin: 14px 0 18px;
+    }
+
+    .timer-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+    .btn-secondary {
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* Set Logger Drawer */
+    #sheet-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      z-index: 9999;
+      display: flex;
+      align-items: flex-end;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.25s, visibility 0.25s;
+    }
+
+    #sheet-modal.visible { opacity: 1; visibility: visible; }
+
+    .sheet-drawer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-radius: 24px 24px 0 0;
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 20px 20px calc(var(--safe-bottom) + 20px);
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    #sheet-modal.visible .sheet-drawer { transform: translateY(0); }
+
+    .set-grid {
+      display: grid;
+      grid-template-columns: 36px 1fr 1fr 40px;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .set-idx {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    .set-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: transparent;
+      transition: all 0.15s;
+    }
+
+    .set-btn.done {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #06080D;
+    }
+
+    /* Bottom Dock */
+    .dock {
       position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
-      background: rgba(14, 18, 27, 0.88);
+      background: rgba(11, 15, 23, 0.88);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border-top: 1px solid var(--border);
-      padding: 10px 24px calc(var(--safe-bottom) + 8px);
+      padding: 10px 24px calc(var(--safe-bottom) + 6px);
       display: flex;
       justify-content: space-around;
-      z-index: 1000;
+      z-index: 900;
     }
 
-    .nav-btn {
+    .dock-tab {
       background: none;
       border: none;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 4px;
+      gap: 3px;
       color: var(--text-sub);
       cursor: pointer;
-      transition: color 0.2s ease, transform 0.15s ease;
+      transition: color 0.15s, transform 0.15s;
     }
 
-    .nav-btn svg {
-      width: 22px;
-      height: 22px;
-      fill: currentColor;
+    .dock-tab svg { width: 22px; height: 22px; fill: currentColor; }
+    .dock-tab span { font-size: 10.5px; font-weight: 600; }
+    .dock-tab.active { color: var(--accent); transform: translateY(-1px); }
+
+    /* Native Toast */
+    #toast {
+      position: fixed;
+      top: calc(var(--safe-top) + 10px);
+      left: 50%;
+      transform: translateX(-50%) translateY(-60px);
+      background: rgba(20, 26, 38, 0.95);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border-accent);
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 10px 20px;
+      border-radius: 99px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      z-index: 10002;
+      opacity: 0;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s;
+      pointer-events: none;
     }
 
-    .nav-btn span {
-      font-size: 10.5px;
-      font-weight: 600;
-      letter-spacing: 0.2px;
+    #toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
     }
 
-    .nav-btn.active {
-      color: var(--accent);
-      transform: translateY(-1px);
+    .view-content { display: none; }
+    .view-content.active { display: block; animation: fadeUp 0.3s ease; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
 
   <!-- Splash Screen -->
-  <div id="splash-screen">
-    <div class="splash-logo">
+  <div id="splash">
+    <div class="splash-emblem">
       <svg viewBox="0 0 24 24">
         <path d="M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14l1.43 1.43L2 7.71l1.43 1.43L2 10.57 3.43 12 7 8.43 15.57 17 12 20.57 13.43 22l1.43-1.43 1.43 1.43 2.14-2.14 1.43 1.43 1.43-1.43-1.43-1.43L22 16.29z"/>
       </svg>
     </div>
-    <div class="splash-title">RECOMP ENGINE</div>
-    <div class="splash-tagline">Nutrition & Hypertrophy System</div>
+    <div class="splash-name">RECOMP PRO</div>
+    <div class="splash-sub">Hypertrophy & Intake Engine</div>
   </div>
 
-  <div class="app-container">
+  <div id="toast">Entry Saved</div>
+
+  <!-- Main Container -->
+  <div class="app-shell">
     <header>
-      <div class="brand-group">
-        <div class="brand-icon">
+      <div class="brand-wrap">
+        <div class="brand-avatar">
           <svg viewBox="0 0 24 24">
             <path d="M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14l1.43 1.43L2 7.71l1.43 1.43L2 10.57 3.43 12 7 8.43 15.57 17 12 20.57 13.43 22l1.43-1.43 1.43 1.43 2.14-2.14 1.43 1.43 1.43-1.43-1.43-1.43L22 16.29z"/>
           </svg>
         </div>
-        <div>
-          <div class="brand-title">Dashboard</div>
-          <div class="brand-subtitle" id="current-date">Today</div>
+        <div class="brand-text">
+          <h1>Dashboard</h1>
+          <p id="label-date">Today</p>
         </div>
       </div>
-      <div class="status-badge" id="workout-day-badge">Push A</div>
+      <div class="day-badge" id="label-split-badge">PUSH A</div>
     </header>
 
-    <!-- Metrics -->
-    <div class="kpi-grid">
-      <div class="kpi-card">
-        <div class="kpi-val" id="disp-calories">0</div>
-        <div class="kpi-label">Calories (kcal)</div>
+    <!-- Visual Ring Dashboard -->
+    <div class="ring-grid">
+      <div class="metric-card">
+        <div class="ring-box">
+          <svg viewBox="0 0 60 60">
+            <circle class="ring-bg" cx="30" cy="30" r="25"/>
+            <circle id="ring-cal" class="ring-bar cal" cx="30" cy="30" r="25"/>
+          </svg>
+          <div class="ring-val" id="text-cal">0</div>
+        </div>
+        <div class="metric-lbl">Calories</div>
+        <div class="metric-sub">Target: 2200</div>
       </div>
-      <div class="kpi-card">
-        <div class="kpi-val" id="disp-protein">0g</div>
-        <div class="kpi-label">Protein (g)</div>
+
+      <div class="metric-card">
+        <div class="ring-box">
+          <svg viewBox="0 0 60 60">
+            <circle class="ring-bg" cx="30" cy="30" r="25"/>
+            <circle id="ring-pro" class="ring-bar pro" cx="30" cy="30" r="25"/>
+          </svg>
+          <div class="ring-val" id="text-pro">0g</div>
+        </div>
+        <div class="metric-lbl">Protein</div>
+        <div class="metric-sub">Target: 160g</div>
       </div>
-      <div class="kpi-card">
-        <div class="kpi-val" id="disp-water">0.0L</div>
-        <div class="kpi-label">Water (L)</div>
+
+      <div class="metric-card">
+        <div class="ring-box">
+          <svg viewBox="0 0 60 60">
+            <circle class="ring-bg" cx="30" cy="30" r="25"/>
+            <circle id="ring-wat" class="ring-bar wat" cx="30" cy="30" r="25"/>
+          </svg>
+          <div class="ring-val" id="text-wat">0.0L</div>
+        </div>
+        <div class="metric-lbl">Water</div>
+        <div class="metric-sub">Target: 3.5L</div>
       </div>
     </div>
 
     <!-- View: Dashboard / Log -->
     <div id="view-dashboard" class="view-content active">
       <div class="panel">
-        <div class="panel-header">
-          <div class="panel-title">Quick Log Entry</div>
+        <div class="panel-head">
+          <h2>Nutrition & Water Intake</h2>
         </div>
 
-        <div class="input-field-group">
-          <label class="input-label">Water Intake (Liters)</label>
-          <input type="number" id="in-water" class="input-box" placeholder="Add Liters" step="0.25">
-          <div class="preset-group">
-            <button class="btn-preset" onclick="addWater(0.25)">+250ml</button>
-            <button class="btn-preset" onclick="addWater(0.50)">+500ml</button>
-            <button class="btn-preset" onclick="addWater(0.75)">+750ml</button>
-            <button class="btn-preset" onclick="addWater(1.00)">+1.0L</button>
+        <div class="field-group">
+          <label class="field-label">Water Intake (Liters)</label>
+          <input type="number" id="input-water" class="data-input" placeholder="0.00" step="0.25">
+          <div class="preset-chips">
+            <button class="chip-btn" onclick="addWater(0.25)">+250ml</button>
+            <button class="chip-btn" onclick="addWater(0.50)">+500ml</button>
+            <button class="chip-btn" onclick="addWater(0.75)">+750ml</button>
+            <button class="chip-btn" onclick="addWater(1.00)">+1.0L</button>
           </div>
         </div>
 
-        <div class="input-field-group">
-          <label class="input-label">Calories Consumed (kcal)</label>
-          <input type="number" id="in-cal" class="input-box" placeholder="e.g. 650">
+        <div class="field-group">
+          <label class="field-label">Calories (kcal)</label>
+          <input type="number" id="input-cal" class="data-input" placeholder="e.g. 550">
         </div>
 
-        <div class="input-field-group">
-          <label class="input-label">Protein Consumed (g)</label>
-          <input type="number" id="in-pro" class="input-box" placeholder="e.g. 40">
-          <div class="preset-group">
-            <button class="btn-preset" onclick="addProtein(25)">+25g Shake</button>
-            <button class="btn-preset" onclick="addProtein(35)">+35g Meal</button>
-            <button class="btn-preset" onclick="addProtein(50)">+50g Heavy</button>
-            <button class="btn-preset" onclick="resetMacros()">Reset</button>
+        <div class="field-group">
+          <label class="field-label">Protein (grams)</label>
+          <input type="number" id="input-pro" class="data-input" placeholder="e.g. 35">
+          <div class="preset-chips">
+            <button class="chip-btn" onclick="addProtein(25)">+25g</button>
+            <button class="chip-btn" onclick="addProtein(35)">+35g</button>
+            <button class="chip-btn" onclick="addProtein(50)">+50g</button>
+            <button class="chip-btn" onclick="resetDay()">Reset</button>
           </div>
         </div>
 
-        <button class="primary-btn" onclick="saveDay()">
-          Save & Log Entry
+        <button class="btn-submit" onclick="logDailyIntake()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+          </svg>
+          Confirm & Save Intake
         </button>
       </div>
     </div>
 
     <!-- View: Workouts -->
     <div id="view-workouts" class="view-content">
-      <div class="day-selector">
-        <button class="day-chip active" onclick="switchSplit('pushA', this)">Push A</button>
-        <button class="day-chip" onclick="switchSplit('pullA', this)">Pull A</button>
-        <button class="day-chip" onclick="switchSplit('legsA', this)">Legs A</button>
-        <button class="day-chip" onclick="switchSplit('pushB', this)">Push B</button>
-        <button class="day-chip" onclick="switchSplit('pullB', this)">Pull B</button>
-        <button class="day-chip" onclick="switchSplit('legsB', this)">Legs B</button>
+      <div class="split-carousel">
+        <button class="split-chip active" onclick="selectSplit('pushA', this)">Push A</button>
+        <button class="split-chip" onclick="selectSplit('pullA', this)">Pull A</button>
+        <button class="split-chip" onclick="selectSplit('legsA', this)">Legs A</button>
+        <button class="split-chip" onclick="selectSplit('pushB', this)">Push B</button>
+        <button class="split-chip" onclick="selectSplit('pullB', this)">Pull B</button>
+        <button class="split-chip" onclick="selectSplit('legsB', this)">Legs B</button>
       </div>
 
       <div class="panel">
-        <div class="panel-header">
-          <div class="panel-title" id="split-title">Push A — Chest & Triceps Focus</div>
+        <div class="panel-head">
+          <h2 id="heading-split">Push A — Chest & Triceps Focus</h2>
         </div>
-        <div id="exercise-list"></div>
+        <div id="exercise-feed"></div>
       </div>
     </div>
   </div>
 
-  <!-- Dock Navigation -->
-  <nav class="dock-nav">
-    <button class="nav-btn active" onclick="navigate('dashboard', this)">
+  <!-- Rest Timer Modal -->
+  <div id="timer-modal">
+    <div class="timer-dialog">
+      <div style="font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase;">Rest Interval</div>
+      <div class="timer-readout" id="timer-display">01:30</div>
+      <div class="timer-buttons">
+        <button class="btn-secondary" onclick="toggleTimer()" id="btn-timer-toggle">Pause</button>
+        <button class="btn-secondary" onclick="dismissTimer()">Dismiss</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive Workout Logger Sheet -->
+  <div id="sheet-modal">
+    <div class="sheet-drawer">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+        <h3 id="sheet-title" style="font-size:16px;font-weight:800;">Barbell Bench Press</h3>
+        <button onclick="dismissSheet()" style="background:none;border:none;color:var(--text-muted);font-weight:700;font-size:14px;">Done</button>
+      </div>
+      <div style="display:grid;grid-template-columns:36px 1fr 1fr 40px;gap:8px;margin-bottom:8px;font-size:11px;font-weight:700;color:var(--text-sub);text-transform:uppercase;">
+        <span>Set</span><span>Weight (kg)</span><span>Reps</span><span>Done</span>
+      </div>
+      <div id="sheet-rows"></div>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation Bar -->
+  <nav class="dock">
+    <button class="dock-tab active" onclick="switchTab('dashboard', this)">
       <svg viewBox="0 0 24 24">
         <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
       </svg>
       <span>Dashboard</span>
     </button>
-    <button class="nav-btn" onclick="navigate('workouts', this)">
+    <button class="dock-tab" onclick="switchTab('workouts', this)">
       <svg viewBox="0 0 24 24">
         <path d="M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14l1.43 1.43L2 7.71l1.43 1.43L2 10.57 3.43 12 7 8.43 15.57 17 12 20.57 13.43 22l1.43-1.43 1.43 1.43 2.14-2.14 1.43 1.43 1.43-1.43-1.43-1.43L22 16.29z"/>
       </svg>
@@ -589,179 +708,270 @@
   </nav>
 
   <script>
-    // Splash screen handler
-    window.addEventListener('DOMContentLoaded', () => {
-      setTimeout(() => {
-        const splash = document.getElementById('splash-screen');
-        splash.classList.add('fade-out');
-        setTimeout(() => splash.style.display = 'none', 600);
-      }, 1000);
-
-      const options = { weekday: 'short', month: 'short', day: 'numeric' };
-      document.getElementById('current-date').innerText = new Date().toLocaleDateString('en-US', options);
-      loadPersistedData();
-      renderWorkout('pushA');
-    });
-
-    // Workout Database
-    const workoutDatabase = {
-      pushA: {
-        title: "Push A — Chest, Delts & Triceps",
-        exercises: [
-          { name: "Barbell Bench Press", sets: "3 sets × 6-8 reps", rest: "2 min" },
-          { name: "Incline DB Press", sets: "3 sets × 8-10 reps", rest: "90 sec" },
-          { name: "Standing Overhead Press", sets: "3 sets × 8-10 reps", rest: "90 sec" },
-          { name: "Dumbbell Lateral Raises", sets: "4 sets × 12-15 reps", rest: "60 sec" },
-          { name: "Cable Tricep Pushdowns", sets: "3 sets × 12 reps", rest: "60 sec" }
-        ]
-      },
-      pullA: {
-        title: "Pull A — Vertical Pull & Biceps",
-        exercises: [
-          { name: "Lat Pulldown / Pullups", sets: "3 sets × 8-10 reps", rest: "2 min" },
-          { name: "Seated Cable Rows", sets: "3 sets × 10 reps", rest: "90 sec" },
-          { name: "Single-Arm Dumbbell Row", sets: "3 sets × 12 reps", rest: "60 sec" },
-          { name: "Rope Face Pulls", sets: "4 sets × 15 reps", rest: "60 sec" },
-          { name: "Incline Dumbbell Curl", sets: "3 sets × 12 reps", rest: "60 sec" }
-        ]
-      },
-      legsA: {
-        title: "Legs A — Quad Dominant & Calves",
-        exercises: [
-          { name: "Barbell Back Squats", sets: "3 sets × 6-8 reps", rest: "2.5 min" },
-          { name: "Romanian Deadlifts", sets: "3 sets × 10 reps", rest: "2 min" },
-          { name: "Leg Press", sets: "3 sets × 12 reps", rest: "90 sec" },
-          { name: "Lying Leg Curls", sets: "3 sets × 15 reps", rest: "60 sec" },
-          { name: "Standing Calf Raises", sets: "4 sets × 15 reps", rest: "45 sec" }
-        ]
-      },
-      pushB: {
-        title: "Push B — Upper Chest & Shoulder Hypertrophy",
-        exercises: [
-          { name: "Incline Barbell Bench", sets: "3 sets × 8 reps", rest: "2 min" },
-          { name: "Flat DB Dumbbell Press", sets: "3 sets × 10 reps", rest: "90 sec" },
-          { name: "Cable Lateral Raises", sets: "4 sets × 15 reps", rest: "60 sec" },
-          { name: "Cable Pec Flyes", sets: "3 sets × 12 reps", rest: "60 sec" },
-          { name: "Lying Skull Crushers", sets: "3 sets × 12 reps", rest: "60 sec" }
-        ]
-      },
-      pullB: {
-        title: "Pull B — Posterior Chain & Horizontal Row",
-        exercises: [
-          { name: "Conventional Deadlift", sets: "3 sets × 5 reps", rest: "3 min" },
-          { name: "Chest-Supported Row", sets: "3 sets × 10 reps", rest: "90 sec" },
-          { name: "Close-Grip Pulldown", sets: "3 sets × 10 reps", rest: "90 sec" },
-          { name: "Rear Delt Dumbbell Fly", sets: "4 sets × 15 reps", rest: "60 sec" },
-          { name: "Hammer Curls", sets: "3 sets × 12 reps", rest: "60 sec" }
-        ]
-      },
-      legsB: {
-        title: "Legs B — Hamstring & Glute Focus",
-        exercises: [
-          { name: "Bulgarian Split Squats", sets: "3 sets × 10 reps/leg", rest: "90 sec" },
-          { name: "Leg Extensions", sets: "3 sets × 15 reps", rest: "60 sec" },
-          { name: "Seated Hamstring Curls", sets: "3 sets × 12 reps", rest: "60 sec" },
-          { name: "Walking DB Lunges", sets: "3 sets × 12 reps", rest: "60 sec" },
-          { name: "Seated Calf Raises", sets: "4 sets × 15 reps", rest: "45 sec" }
-        ]
-      }
-    };
-
-    // Navigation Switcher
-    function navigate(view, btn) {
-      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.view-content').forEach(v => v.classList.remove('active'));
-      
-      btn.classList.add('active');
-      document.getElementById(`view-${view}`).classList.add('active');
-    }
-
-    // Workout Switcher
-    function switchSplit(key, chip) {
-      document.querySelectorAll('.day-chip').forEach(c => c.classList.remove('active'));
-      chip.classList.add('active');
-      renderWorkout(key);
-    }
-
-    function renderWorkout(key) {
-      const data = workoutDatabase[key];
-      document.getElementById('split-title').innerText = data.title;
-      document.getElementById('workout-day-badge').innerText = key.toUpperCase();
-      
-      let html = '';
-      data.exercises.forEach(ex => {
-        html += `
-          <div class="exercise-card">
-            <div class="exercise-info">
-              <h4>${ex.name}</h4>
-              <p>${ex.sets}</p>
-            </div>
-            <div class="rest-tag">${ex.rest}</div>
-          </div>
-        `;
-      });
-      document.getElementById('exercise-list').innerHTML = html;
-    }
-
-    // Macro Tracking Engine with Local Persistence
-    let state = {
+    const TARGETS = { cal: 2200, pro: 160, wat: 3.5 };
+    let appState = {
       water: 0.0,
       calories: 0,
       protein: 0
     };
 
-    function updateDisplays() {
-      document.getElementById('disp-water').innerText = `${state.water.toFixed(2)}L`;
-      document.getElementById('disp-calories').innerText = `${state.calories}`;
-      document.getElementById('disp-protein').innerText = `${state.protein}g`;
-    }
-
-    function addWater(amount) {
-      state.water = Math.round((state.water + amount) * 100) / 100;
-      updateDisplays();
-      persistData();
-    }
-
-    function addProtein(amount) {
-      state.protein += amount;
-      updateDisplays();
-      persistData();
-    }
-
-    function resetMacros() {
-      state = { water: 0.0, calories: 0, protein: 0 };
-      updateDisplays();
-      persistData();
-    }
-
-    function saveDay() {
-      const calIn = parseInt(document.getElementById('in-cal').value);
-      const proIn = parseInt(document.getElementById('in-pro').value);
-      const watIn = parseFloat(document.getElementById('in-water').value);
-
-      if (!isNaN(calIn)) state.calories += calIn;
-      if (!isNaN(proIn)) state.protein += proIn;
-      if (!isNaN(watIn)) state.water = Math.round((state.water + watIn) * 100) / 100;
-
-      document.getElementById('in-cal').value = '';
-      document.getElementById('in-pro').value = '';
-      document.getElementById('in-water').value = '';
-
-      updateDisplays();
-      persistData();
-      alert("Intake saved successfully!");
-    }
-
-    function persistData() {
-      localStorage.setItem('recomp_state', JSON.stringify(state));
-    }
-
-    function loadPersistedData() {
-      const saved = localStorage.getItem('recomp_state');
-      if (saved) {
-        state = JSON.parse(saved);
-        updateDisplays();
+    const workoutData = {
+      pushA: {
+        title: "Push A — Chest, Delts & Triceps Focus",
+        exercises: [
+          { name: "Barbell Bench Press", sets: 3, reps: "6-8", rest: 120 },
+          { name: "Incline DB Press", sets: 3, reps: "8-10", rest: 90 },
+          { name: "Standing Overhead Press", sets: 3, reps: "8-10", rest: 90 },
+          { name: "Lateral Raises", sets: 4, reps: "12-15", rest: 60 },
+          { name: "Tricep Pushdowns", sets: 3, reps: "12", rest: 60 }
+        ]
+      },
+      pullA: {
+        title: "Pull A — Vertical Pull & Biceps Focus",
+        exercises: [
+          { name: "Lat Pulldown / Pullups", sets: 3, reps: "8-10", rest: 120 },
+          { name: "Seated Cable Row", sets: 3, reps: "10-12", rest: 90 },
+          { name: "Single-Arm DB Row", sets: 3, reps: "12", rest: 60 },
+          { name: "Face Pulls", sets: 4, reps: "15", rest: 60 },
+          { name: "Incline DB Curls", sets: 3, reps: "12", rest: 60 }
+        ]
+      },
+      legsA: {
+        title: "Legs A — Quad Dominant & Calves",
+        exercises: [
+          { name: "Barbell Squats", sets: 3, reps: "6-8", rest: 150 },
+          { name: "Romanian Deadlifts", sets: 3, reps: "8-10", rest: 120 },
+          { name: "Leg Press", sets: 3, reps: "12", rest: 90 },
+          { name: "Lying Leg Curls", sets: 3, reps: "15", rest: 60 },
+          { name: "Standing Calf Raises", sets: 4, reps: "15", rest: 45 }
+        ]
+      },
+      pushB: {
+        title: "Push B — Upper Chest & Shoulder Hypertrophy",
+        exercises: [
+          { name: "Incline Barbell Bench", sets: 3, reps: "8", rest: 120 },
+          { name: "Flat DB Press", sets: 3, reps: "10", rest: 90 },
+          { name: "Cable Lateral Raises", sets: 4, reps: "15", rest: 60 },
+          { name: "Cable Pec Flyes", sets: 3, reps: "12", rest: 60 },
+          { name: "Skull Crushers", sets: 3, reps: "12", rest: 60 }
+        ]
+      },
+      pullB: {
+        title: "Pull B — Posterior Chain & Horizontal Rows",
+        exercises: [
+          { name: "Conventional Deadlift", sets: 3, reps: "5", rest: 180 },
+          { name: "Chest-Supported Row", sets: 3, reps: "10", rest: 90 },
+          { name: "Close-Grip Pulldown", sets: 3, reps: "10", rest: 90 },
+          { name: "Rear Delt Flyes", sets: 4, reps: "15", rest: 60 },
+          { name: "Hammer Curls", sets: 3, reps: "12", rest: 60 }
+        ]
+      },
+      legsB: {
+        title: "Legs B — Hamstring & Glute Focus",
+        exercises: [
+          { name: "Bulgarian Split Squats", sets: 3, reps: "10/leg", rest: 90 },
+          { name: "Leg Extensions", sets: 3, reps: "15", rest: 60 },
+          { name: "Seated Hamstring Curls", sets: 3, reps: "12", rest: 60 },
+          { name: "Walking DB Lunges", sets: 3, reps: "12", rest: 60 },
+          { name: "Seated Calf Raises", sets: 4, reps: "15", rest: 45 }
+        ]
       }
+    };
+
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        document.getElementById('splash').classList.add('hidden');
+      }, 700);
+
+      const d = new Date();
+      document.getElementById('label-date').innerText = d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+
+      loadState();
+      selectSplit('pushA');
+    });
+
+    function switchTab(view, tab) {
+      document.querySelectorAll('.dock-tab').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.view-content').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById(`view-${view}`).classList.add('active');
+    }
+
+    function selectSplit(key, chip) {
+      if (chip) {
+        document.querySelectorAll('.split-chip').forEach(t => t.classList.remove('active'));
+        chip.classList.add('active');
+      }
+      document.getElementById('label-split-badge').innerText = key.toUpperCase();
+      const split = workoutData[key];
+      document.getElementById('heading-split').innerText = split.title;
+
+      let html = '';
+      split.exercises.forEach(ex => {
+        html += `
+          <div class="exercise-row" onclick="openExerciseSheet('${ex.name}', ${ex.sets}, '${ex.reps}')">
+            <div class="ex-detail">
+              <h3>${ex.name}</h3>
+              <p>${ex.sets} sets × ${ex.reps} reps</p>
+            </div>
+            <div class="rest-pill" onclick="event.stopPropagation(); startRestTimer(${ex.rest})">
+              ⏱ ${ex.rest}s
+            </div>
+          </div>
+        `;
+      });
+      document.getElementById('exercise-feed').innerHTML = html;
+    }
+
+    function syncRings() {
+      document.getElementById('text-cal').innerText = appState.calories;
+      document.getElementById('text-pro').innerText = `${appState.protein}g`;
+      document.getElementById('text-wat').innerText = `${appState.water.toFixed(1)}L`;
+
+      const calRatio = Math.min(appState.calories / TARGETS.cal, 1);
+      const proRatio = Math.min(appState.protein / TARGETS.pro, 1);
+      const watRatio = Math.min(appState.water / TARGETS.wat, 1);
+
+      document.getElementById('ring-cal').style.strokeDashoffset = 157 - (157 * calRatio);
+      document.getElementById('ring-pro').style.strokeDashoffset = 157 - (157 * proRatio);
+      document.getElementById('ring-wat').style.strokeDashoffset = 157 - (157 * watRatio);
+    }
+
+    function addWater(amt) {
+      appState.water = Math.round((appState.water + amt) * 100) / 100;
+      saveState();
+      triggerToast(`+${amt * 1000}ml Water Added`);
+    }
+
+    function addProtein(amt) {
+      appState.protein += amt;
+      saveState();
+      triggerToast(`+${amt}g Protein Added`);
+    }
+
+    function logDailyIntake() {
+      const c = parseInt(document.getElementById('input-cal').value);
+      const p = parseInt(document.getElementById('input-pro').value);
+      const w = parseFloat(document.getElementById('input-water').value);
+
+      if (!isNaN(c)) appState.calories += c;
+      if (!isNaN(p)) appState.protein += p;
+      if (!isNaN(w)) appState.water = Math.round((appState.water + w) * 100) / 100;
+
+      document.getElementById('input-cal').value = '';
+      document.getElementById('input-pro').value = '';
+      document.getElementById('input-water').value = '';
+
+      saveState();
+      triggerToast("Intake Saved");
+    }
+
+    function resetDay() {
+      appState.water = 0;
+      appState.calories = 0;
+      appState.protein = 0;
+      saveState();
+      triggerToast("Counters Cleared");
+    }
+
+    function saveState() {
+      localStorage.setItem('recomp_pwa_v2', JSON.stringify(appState));
+      syncRings();
+    }
+
+    function loadState() {
+      const stored = localStorage.getItem('recomp_pwa_v2');
+      if (stored) appState = JSON.parse(stored);
+      syncRings();
+    }
+
+    let intervalId = null;
+    let secondsLeft = 0;
+    let timerRunning = false;
+
+    function startRestTimer(secs) {
+      secondsLeft = secs;
+      timerRunning = true;
+      document.getElementById('timer-modal').classList.add('visible');
+      document.getElementById('btn-timer-toggle').innerText = "Pause";
+      paintTimer();
+
+      clearInterval(intervalId);
+      intervalId = setInterval(() => {
+        if (timerRunning && secondsLeft > 0) {
+          secondsLeft--;
+          paintTimer();
+          if (secondsLeft === 0) {
+            clearInterval(intervalId);
+            playChime();
+            triggerToast("Rest Complete!");
+          }
+        }
+      }, 1000);
+    }
+
+    function paintTimer() {
+      const m = Math.floor(secondsLeft / 60);
+      const s = secondsLeft % 60;
+      document.getElementById('timer-display').innerText = 
+        `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    }
+
+    function toggleTimer() {
+      timerRunning = !timerRunning;
+      document.getElementById('btn-timer-toggle').innerText = timerRunning ? "Pause" : "Resume";
+    }
+
+    function dismissTimer() {
+      clearInterval(intervalId);
+      document.getElementById('timer-modal').classList.remove('visible');
+    }
+
+    function playChime() {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+        osc.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.35);
+      } catch(e) {}
+    }
+
+    function openExerciseSheet(name, count, repTarget) {
+      document.getElementById('sheet-title').innerText = name;
+      let html = '';
+      for (let i = 1; i <= count; i++) {
+        html += `
+          <div class="set-grid">
+            <span class="set-idx">S${i}</span>
+            <input type="number" class="data-input" placeholder="kg" style="padding:8px 10px;font-size:13px;">
+            <input type="number" class="data-input" placeholder="${repTarget}" style="padding:8px 10px;font-size:13px;">
+            <div class="set-btn" onclick="toggleSetCheck(this)">✓</div>
+          </div>
+        `;
+      }
+      document.getElementById('sheet-rows').innerHTML = html;
+      document.getElementById('sheet-modal').classList.add('visible');
+    }
+
+    function toggleSetCheck(btn) {
+      btn.classList.toggle('done');
+      if (btn.classList.contains('done')) {
+        triggerToast("Set Completed");
+      }
+    }
+
+    function dismissSheet() {
+      document.getElementById('sheet-modal').classList.remove('visible');
+    }
+
+    function triggerToast(message) {
+      const t = document.getElementById('toast');
+      t.innerText = message;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2000);
     }
   </script>
 </body>
