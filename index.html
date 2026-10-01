@@ -282,17 +282,18 @@
       }
     }
 
-    .metric-grid {
+    /* 3-Column Highlights Grid */
+    .metric-grid-3 {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
       margin-bottom: 24px;
     }
 
     .metric-card {
       background: var(--surface-1);
       border-radius: 16px;
-      padding: 16px;
+      padding: 14px 12px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -301,21 +302,21 @@
       transition: transform 0.15s ease;
     }
 
-    .metric-card:active { transform: scale(0.97); }
+    .metric-card:active { transform: scale(0.96); }
 
-    .metric-top { display: flex; align-items: center; gap: 8px; }
+    .metric-top { display: flex; align-items: center; gap: 6px; }
     .metric-icon-badge {
-      width: 26px;
-      height: 26px;
+      width: 24px;
+      height: 24px;
       border-radius: 6px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
-    .metric-icon-badge svg { width: 16px; height: 16px; fill: #000; }
-    .metric-category { font-size: 13px; font-weight: 600; }
-    .metric-num { font-size: 26px; font-weight: 800; letter-spacing: -0.6px; line-height: 30px; margin-top: 14px; }
-    .metric-unit { font-size: 13px; font-weight: 600; color: var(--label-secondary); margin-left: 2px; }
+    .metric-icon-badge svg { width: 14px; height: 14px; fill: #000; }
+    .metric-category { font-size: 11.5px; font-weight: 700; white-space: nowrap; }
+    .metric-num { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; line-height: 24px; margin-top: 10px; }
+    .metric-unit { font-size: 11px; font-weight: 600; color: var(--label-secondary); margin-left: 2px; }
 
     /* Inset Group Lists */
     .inset-list {
@@ -370,6 +371,33 @@
     }
 
     .chevron { width: 14px; height: 14px; fill: var(--label-tertiary); }
+
+    /* Quick Preset Chips */
+    .preset-chip-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 10px;
+      margin-bottom: 16px;
+    }
+
+    .preset-chip-btn {
+      background: var(--surface-2);
+      border: 1px solid var(--separator);
+      border-radius: 12px;
+      padding: 10px 0;
+      color: var(--label-primary);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s var(--spring);
+    }
+
+    .preset-chip-btn:active {
+      transform: scale(0.94);
+      background: var(--stand-cyan);
+      color: #000;
+    }
 
     /* Horizontal Split Selection Carousel */
     .split-selector-track {
@@ -432,6 +460,11 @@
     .apple-btn.secondary {
       background: var(--surface-2);
       color: var(--label-primary);
+    }
+
+    .apple-btn.cyan {
+      background: var(--stand-cyan);
+      color: #000;
     }
 
     /* Modals & Half-Sheets */
@@ -708,13 +741,13 @@
       <div class="studio-grid">
         <div>
           <h2 class="section-title">Highlights</h2>
-          <div class="metric-grid">
+          <div class="metric-grid-3">
             <div class="metric-card" onclick="openNutritionModal('cal')">
               <div class="metric-top">
                 <div class="metric-icon-badge" style="background:var(--move-red);">
                   <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z"/></svg>
                 </div>
-                <div class="metric-category" style="color:var(--move-red);">Energy Intake</div>
+                <div class="metric-category" style="color:var(--move-red);">Energy</div>
               </div>
               <div>
                 <span class="metric-num" id="card-cal-val">0</span>
@@ -727,26 +760,39 @@
                 <div class="metric-icon-badge" style="background:var(--exercise-green);">
                   <svg viewBox="0 0 24 24"><path d="M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14l1.43 1.43L2 7.71l1.43 1.43L2 10.57 3.43 12 7 8.43 15.57 17 12 20.57 13.43 22l1.43-1.43 1.43 1.43 2.14-2.14 1.43 1.43 1.43-1.43-1.43-1.43L22 16.29z"/></svg>
                 </div>
-                <div class="metric-category" style="color:var(--exercise-green);">Protein Influx</div>
+                <div class="metric-category" style="color:var(--exercise-green);">Protein</div>
               </div>
               <div>
                 <span class="metric-num" id="card-pro-val">0</span>
                 <span class="metric-unit">G</span>
               </div>
             </div>
+
+            <div class="metric-card" onclick="openHydrationModal()">
+              <div class="metric-top">
+                <div class="metric-icon-badge" style="background:var(--stand-cyan);">
+                  <svg viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+                </div>
+                <div class="metric-category" style="color:var(--stand-cyan);">Hydration</div>
+              </div>
+              <div>
+                <span class="metric-num" id="card-wat-val">0.0</span>
+                <span class="metric-unit">L</span>
+              </div>
+            </div>
           </div>
 
-          <!-- Dynamic Today's Meals Timeline -->
-          <h2 class="section-title">Today's Meals</h2>
+          <!-- Dynamic Today's Activity Timeline -->
+          <h2 class="section-title">Today's Intake & Hydration</h2>
           <div class="inset-list" id="today-meals-list">
             <div class="list-row" style="color:var(--label-secondary);font-size:14px;">No intake logged today yet.</div>
           </div>
         </div>
 
         <div>
-          <h2 class="section-title">Hydration Intake</h2>
+          <h2 class="section-title">Fast Hydration Actions</h2>
           <div class="inset-list">
-            <div class="list-row" onclick="addWaterLogged(0.25)">
+            <div class="list-row" onclick="quickAddWater(0.25, 'Glass of Water (250ml)')">
               <div class="row-left">
                 <div class="row-icon-pill" style="background:var(--stand-cyan);">
                   <svg viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
@@ -762,7 +808,7 @@
               </div>
             </div>
 
-            <div class="list-row" onclick="addWaterLogged(0.50)">
+            <div class="list-row" onclick="quickAddWater(0.50, 'Hydration Bottle (500ml)')">
               <div class="row-left">
                 <div class="row-icon-pill" style="background:var(--stand-cyan);">
                   <svg viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
@@ -774,6 +820,21 @@
               </div>
               <div class="row-right">
                 <span>+0.50L</span>
+                <svg class="chevron" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+              </div>
+            </div>
+
+            <div class="list-row" onclick="openHydrationModal()">
+              <div class="row-left">
+                <div class="row-icon-pill" style="background:var(--surface-2);">
+                  <svg style="fill:var(--stand-cyan);" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                </div>
+                <div>
+                  <div class="row-title">Custom Water Intake...</div>
+                  <div class="row-sub">Log exact milliliters or bottle volume</div>
+                </div>
+              </div>
+              <div class="row-right">
                 <svg class="chevron" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
               </div>
             </div>
@@ -913,6 +974,37 @@
         </div>
       </div>
       <button class="apple-btn" onclick="saveNutritionEntry()">Save to Today's Log</button>
+    </div>
+  </div>
+
+  <!-- MODAL: DEDICATED HYDRATION SHEET MODAL -->
+  <div id="modal-hydration" class="modal-overlay">
+    <div class="sheet-body">
+      <div class="drag-indicator"></div>
+      <div class="sheet-nav">
+        <h3>Log Hydration Intake</h3>
+        <button class="sheet-done-btn" onclick="closeHydrationModal()">Cancel</button>
+      </div>
+
+      <div style="font-size:12px;font-weight:700;color:var(--stand-cyan);text-transform:uppercase;margin-bottom:8px;">Quick Volume Presets</div>
+      <div class="preset-chip-grid">
+        <button class="preset-chip-btn" onclick="applyWaterPreset(250)">+250ml</button>
+        <button class="preset-chip-btn" onclick="applyWaterPreset(500)">+500ml</button>
+        <button class="preset-chip-btn" onclick="applyWaterPreset(750)">+750ml</button>
+        <button class="preset-chip-btn" onclick="applyWaterPreset(1000)">+1.0L</button>
+      </div>
+
+      <div class="inset-list" style="margin-bottom:16px;">
+        <div class="list-row">
+          <span class="row-title">Volume (Milliliters)</span>
+          <input type="number" id="hydra-input-ml" class="apple-input" style="width:120px;" placeholder="e.g. 350">
+        </div>
+        <div class="list-row">
+          <span class="row-title">Source / Note</span>
+          <input type="text" id="hydra-input-desc" class="apple-input" style="width:160px;text-align:left;" placeholder="Shaker / Glass">
+        </div>
+      </div>
+      <button class="apple-btn cyan" onclick="saveCustomHydration()">Record Hydration</button>
     </div>
   </div>
 
@@ -1078,7 +1170,7 @@
     let state = {
       onboardingComplete: false,
       targets: { cal: 2200, pro: 160, wat: 3.5 },
-      dailyLogs: {}, // Partitioned by YYYY-MM-DD
+      dailyLogs: {},
       weightHistory: [
         { date: 'Sep 26', weight: 75.8 },
         { date: 'Sep 28', weight: 75.5 },
@@ -1105,7 +1197,7 @@
           cal: 0,
           pro: 0,
           wat: 0.0,
-          entries: [] // { id, name, cal, pro, time }
+          entries: []
         };
       }
       return state.dailyLogs[key];
@@ -1135,7 +1227,7 @@
       }, 700);
     });
 
-    // Dynamic Nutrition Logging Modal
+    // Nutrition Logging Modal
     function openNutritionModal(type) {
       document.getElementById('modal-nutrition').classList.add('open');
       document.getElementById('nutrition-modal-title').innerText = type === 'pro' ? 'Log Protein Influx' : 'Log Energy Intake';
@@ -1167,6 +1259,7 @@
         name: desc,
         cal: c,
         pro: p,
+        wat: 0,
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       });
 
@@ -1177,15 +1270,59 @@
       closeNutritionModal();
     }
 
-    function addWaterLogged(amt) {
+    // Dedicated Hydration Modal & Controller
+    function openHydrationModal() {
+      document.getElementById('modal-hydration').classList.add('open');
+      document.getElementById('hydra-input-ml').value = '';
+      document.getElementById('hydra-input-desc').value = '';
+    }
+
+    function closeHydrationModal() {
+      document.getElementById('modal-hydration').classList.remove('open');
+    }
+
+    function applyWaterPreset(ml) {
+      document.getElementById('hydra-input-ml').value = ml;
+      document.getElementById('hydra-input-desc').value = ml >= 750 ? 'Shaker Bottle' : 'Water Serving';
+    }
+
+    function saveCustomHydration() {
+      const ml = parseFloat(document.getElementById('hydra-input-ml').value) || 0;
+      const desc = document.getElementById('hydra-input-desc').value.trim() || 'Hydration Intake';
+
+      if (ml <= 0) {
+        alert("Please enter a valid milliliter volume.");
+        return;
+      }
+
+      const liters = Math.round((ml / 1000) * 100) / 100;
       const log = getTodayLog();
-      log.wat = Math.round((log.wat + amt) * 100) / 100;
+      log.wat = Math.round((log.wat + liters) * 100) / 100;
       log.entries.push({
         id: Date.now(),
-        name: `${amt >= 0.5 ? 'Hydration Bottle' : 'Glass of Water'}`,
+        name: `${desc} (${ml}ml)`,
         cal: 0,
         pro: 0,
-        wat: amt,
+        wat: liters,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      });
+
+      triggerHaptic([30]);
+      saveState();
+      renderRings();
+      renderTodayMealsList();
+      closeHydrationModal();
+    }
+
+    function quickAddWater(liters, label) {
+      const log = getTodayLog();
+      log.wat = Math.round((log.wat + liters) * 100) / 100;
+      log.entries.push({
+        id: Date.now(),
+        name: label,
+        cal: 0,
+        pro: 0,
+        wat: liters,
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       });
       triggerHaptic([30]);
@@ -1223,7 +1360,7 @@
         let metricsDesc = [];
         if (entry.cal) metricsDesc.push(`${entry.cal} kcal`);
         if (entry.pro) metricsDesc.push(`${entry.pro}g protein`);
-        if (entry.wat) metricsDesc.push(`+${entry.wat}L water`);
+        if (entry.wat) metricsDesc.push(`+${entry.wat.toFixed(2)}L water`);
 
         html += `
           <div class="list-row">
@@ -1252,6 +1389,7 @@
 
       document.getElementById('card-cal-val').innerText = log.cal;
       document.getElementById('card-pro-val').innerText = log.pro;
+      document.getElementById('card-wat-val').innerText = log.wat.toFixed(1);
 
       document.getElementById('in-target-cal').value = state.targets.cal;
       document.getElementById('in-target-pro').value = state.targets.pro;
@@ -1737,7 +1875,7 @@
       ctx.lineCap = "round";
 
       linePoints.forEach((pt, i) => {
-        if (i === 0) ctx.moveTo(pt.x, pt.y);
+        if (i === 0) ctx.lineTo(pt.x, pt.y);
         else ctx.lineTo(pt.x, pt.y);
       });
       ctx.stroke();
